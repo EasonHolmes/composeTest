@@ -113,14 +113,14 @@ class FoundationActivity : BaseActivity() {
         Log.e("ethan", "TestButtons===22")
         val stateData = viewmodel.uiViewEvent.observeAsState()
 
-//        androidx.compose.material3.Button(onClick = {
-//            viewmodel.changeData()
-//        }) {
-//            androidx.compose.material3.Text(
-//                text = stateData.value?.exampleUiData?.content
-//                    ?: "click me singleLiveData ViewModel changeUI"
-//            )
-//        }
+        androidx.compose.material3.Button(onClick = {
+            viewmodel.changeData()
+        }) {
+            androidx.compose.material3.Text(
+                text = stateData.value?.exampleUiData?.content
+                    ?: "click me singleLiveData ViewModel changeUI"
+            )
+        }
     }
     @Composable
     fun CircularRevealAnima(){
