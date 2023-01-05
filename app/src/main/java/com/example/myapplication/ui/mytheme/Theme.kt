@@ -1,13 +1,11 @@
 package com.example.myapplication.ui.mytheme
 
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.fontResource
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import com.example.myapplication.ui.theme.*
 
 /**
@@ -51,17 +49,70 @@ private val LightColorPalette = lightColors(
 //) {
 //    // M3 应用内容
 
+data class LocalColor(
+    val primary: androidx.compose.ui.graphics.Color = Color(android.graphics.Color.GREEN),
+    var textColor: androidx.compose.ui.graphics.Color = Color(android.graphics.Color.RED),
+)
+
+val localColors = staticCompositionLocalOf { LocalColor() }
+
 @Composable
 fun CustomApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
-)
-{
-   val  colors = if (darkTheme) DarkColorPalette else LightColorPalette
-   MaterialTheme(
-       colors = colors,
-       typography = typography,
-       shapes = Shapes,
-       content = content,
-   )
+) {
+    val colors = if (darkTheme) DarkColorPalette else LightColorPalette
+//    CompositionLocalProvider(LocalContentColor provides  Color.Green) {
+    MaterialTheme(
+        colors = colors,
+        typography = typography,
+        shapes = Shapes,
+        content = content,
+    )
+//    }
+
+}
+
+/**
+ * 手动更改色值圆角这些步骤：
+ * 1。定义枚举或实体类
+ * 2。MaterialTheme中传入对应的实体，以应用自义定的颜色
+ * 3。使用可变类型比如： var changeColor by remember {
+                        mutableStateOf(ColorTheme.BLACK)
+                                                }
+    4。在使用色值或圆角等的时候使用MaterialTheme.colors.onBackground
+    5。在触发修改的位置更改changeColor(枚举值)即可
+ */
+@Composable
+fun ChangeColorApplicationTheme(
+    colorTheme: ColorTheme = ColorTheme.BLACK,
+    content: @Composable () -> Unit
+) {
+    val colors = when(colorTheme){
+        ColorTheme.BLACK->{
+            Color.Black
+        }
+        ColorTheme.GREEN->{
+            Color.Green
+        }
+        ColorTheme.BLUE->{
+            Color.Blue
+        }
+        ColorTheme.WHITE->{
+            Color.White
+        }
+    }
+    MaterialTheme(
+        colors = lightColors(onBackground = colors),
+        typography = typography,
+        shapes = Shapes,
+        content = content,
+    )
+}
+
+enum class ColorTheme {
+    BLACK,
+    GREEN,
+    BLUE,
+    WHITE
 }
