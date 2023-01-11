@@ -103,7 +103,7 @@ fun ChangeColorApplicationTheme(
         }
     }
     MaterialTheme(
-        colors = lightColors(onBackground = colors),
+        colors = lightColors(onBackground = colors, primary = Teal200 ),
         typography = typography,
         shapes = Shapes,
         content = content,

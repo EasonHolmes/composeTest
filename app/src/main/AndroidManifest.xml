@@ -25,6 +25,8 @@
         <activity android:name=".ui.AnimationActivity"/>
         <activity android:name=".ui.MotionLayoutActivity"/>
         <activity android:name=".ui.CollapsingActiivty"/>
+        <activity android:name=".ui.BottomBar_PagerActivity"/>
+        <activity android:name=".ui.NavigationActivity"/>
     </application>
 
 </manifest>

@@ -1,21 +1,12 @@
 package com.example.myapplication
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Bundle
-import android.os.Environment
 import android.util.Log
-import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -23,27 +14,15 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.*
 import com.example.myapplication.ui.mytheme.ChangeColorApplicationTheme
 import com.example.myapplication.ui.mytheme.ColorTheme
-import com.example.myapplication.ui.mytheme.CustomApplicationTheme
-import com.example.myapplication.ui.mytheme.localColors
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
-import com.example.myapplication.ui.widget.ClickColumn
-import com.example.myapplication.ui.widget.drawContent
-import java.io.File
-import java.time.format.TextStyle
 
 
 /**
@@ -53,7 +32,9 @@ enum class JumpEntity(val value: String) {
     ANIMATION("animation"),
     FOUNDATION("foundation"),
     MOTIONLAYOUT("motionLayout"),
-    COLLAPSING("Collapsing视差")
+    COLLAPSING("Collapsing视差"),
+    BOTTOM_BAR("Bottombar"),
+    NAVIGATION("Navigation")
 }
 
 class ComposeUIActivity : BaseActivity() {
@@ -61,7 +42,9 @@ class ComposeUIActivity : BaseActivity() {
         JumpEntity.ANIMATION,
         JumpEntity.FOUNDATION,
         JumpEntity.MOTIONLAYOUT,
-        JumpEntity.COLLAPSING
+        JumpEntity.COLLAPSING,
+        JumpEntity.BOTTOM_BAR,
+        JumpEntity.NAVIGATION
     )
 
     private val mViewmodel by lazy {
@@ -72,12 +55,12 @@ class ComposeUIActivity : BaseActivity() {
     @Composable
     override fun ContentView() {
         var changeColor by remember {
-            mutableStateOf(ColorTheme.BLACK)
+            mutableStateOf(ColorTheme.WHITE)
         }
         Column {
             ChangeColorApplicationTheme(changeColor) {
                 Button(onClick = {
-                    changeColor = ColorTheme.WHITE
+                    changeColor = ColorTheme.BLACK
                 }) {
                     Text(text = "改变主题")
                 }
@@ -179,6 +162,13 @@ class ComposeUIActivity : BaseActivity() {
             JumpEntity.COLLAPSING -> {
                 startActivity(Intent(this, CollapsingActiivty::class.java))
             }
+            JumpEntity.BOTTOM_BAR->{
+                startActivity(Intent(this,BottomBar_PagerActivity::class.java))
+            }
+            JumpEntity.NAVIGATION->{
+                startActivity(Intent(this,NavigationActivity::class.java))
+            }
+
         }
     }
 

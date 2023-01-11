@@ -53,5 +53,5 @@ abstract class BaseActivity : AppCompatActivity() {
     @Composable
     abstract fun ContentView()
 
-    abstract fun getActTtitle(): String
+   open  fun getActTtitle(): String = this::class.java.simpleName
 }
