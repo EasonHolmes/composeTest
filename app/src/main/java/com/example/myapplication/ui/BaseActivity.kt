@@ -28,9 +28,9 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
  * Created by Ethan Cui on 2022/11/8
 沉浸式方法
 step1:
-使用把布局顶上去WindowCompat.setDecorFitsSystemWindows(window, false) (这个方法是没有透明遮罩)
+使用把布局顶上去WindowCompat.setDecorFitsSystemWindows(window, false) (这个方法是没有透明遮罩，并且需要处理导航栏)
 或
-<item name="android:windowTranslucentStatus">true</item> (这个方法有)
+<item name="android:windowTranslucentStatus">true</item> (这个方法有，有些没有，但这个只顶状态栏，不需要处理导航栏问题)
 
 step2:
 使用
@@ -61,7 +61,7 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        window.statusBarColor = ContextCompat.getColor(this, R.color.teal_200)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             rememberSystemUiController().run {
                 setStatusBarColor(Color.Transparent, false)
