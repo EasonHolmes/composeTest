@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -34,7 +35,8 @@ enum class JumpEntity(val value: String) {
     MOTIONLAYOUT("motionLayout"),
     COLLAPSING("Collapsing视差"),
     BOTTOM_BAR("Bottombar"),
-    NAVIGATION("Navigation")
+    NAVIGATION("Navigation"),
+    PREVIEW_VIEWMODE("Viewmodel在Preview中使用"),
 }
 
 class ComposeUIActivity : BaseActivity() {
@@ -44,8 +46,13 @@ class ComposeUIActivity : BaseActivity() {
         JumpEntity.MOTIONLAYOUT,
         JumpEntity.COLLAPSING,
         JumpEntity.BOTTOM_BAR,
-        JumpEntity.NAVIGATION
+        JumpEntity.NAVIGATION,
+        JumpEntity.PREVIEW_VIEWMODE,
     )
+
+    companion object {
+        val ETAG = "ethan"
+    }
 
     private val mViewmodel by lazy {
         Log.e("ethan", "iiiiii")
@@ -57,7 +64,8 @@ class ComposeUIActivity : BaseActivity() {
         var changeColor by remember {
             mutableStateOf(ColorTheme.WHITE)
         }
-        Column {
+        Column() {
+            //还有lightDarkTheme根据主题变化
             ChangeColorApplicationTheme(changeColor) {
                 Button(onClick = {
                     changeColor = ColorTheme.BLACK
@@ -67,6 +75,33 @@ class ComposeUIActivity : BaseActivity() {
                 ListUI()
             }
         }
+//        useOpenAi()
+    }
+
+
+    private fun useOpenAi() {
+        //        val scop  = rememberCoroutineScope()
+        //        LaunchedEffect(key1 = Unit, block ={
+        //            scop.launch {
+        //                val openAI = OpenAI("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")
+        //                val ada = openAI.model(modelId = ModelId("text-ada-001"))
+        //                val completionRequest = CompletionRequest(
+        //                    model = ada.id,
+        //                    prompt = "Please write an 800-word essay"
+        //                )
+        //                openAI.completions(completionRequest)
+        //                    .onEach { Log.e(ETAG,"onEach====="+it.choices[0].text) }
+        //                    .onCompletion { println() }
+        //                    .launchIn(this)
+        //                    .join()
+        //                val moderation = openAI.moderations(
+        //                    request = ModerationRequest(
+        //                        input = listOf("I want to kill them.")
+        //                    )
+        //                )
+        ////               Log.e(ETAG,"moderation=="+moderation.results[0].categoryScores.)
+        //            }
+        //        } )
     }
 
     override fun getActTtitle(): String {
@@ -162,12 +197,16 @@ class ComposeUIActivity : BaseActivity() {
             JumpEntity.COLLAPSING -> {
                 startActivity(Intent(this, CollapsingActiivty::class.java))
             }
-            JumpEntity.BOTTOM_BAR->{
-                startActivity(Intent(this,BottomBar_PagerActivity::class.java))
+            JumpEntity.BOTTOM_BAR -> {
+                startActivity(Intent(this, BottomBar_PagerActivity::class.java))
             }
-            JumpEntity.NAVIGATION->{
-                startActivity(Intent(this,NavigationActivity::class.java))
+            JumpEntity.NAVIGATION -> {
+                startActivity(Intent(this, NavigationActivity::class.java))
             }
+            JumpEntity.PREVIEW_VIEWMODE -> {
+                startActivity(Intent(this, PreviewByViewmodelActivity::class.java))
+            }
+
 
         }
     }

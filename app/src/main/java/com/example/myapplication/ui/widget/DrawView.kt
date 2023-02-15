@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.ui.FoundationActivity
 import com.example.myapplication.ui.TestDelay
-import com.example.myapplication.ui.mytheme.CustomApplicationTheme
+import com.example.myapplication.ui.mytheme.LightDarkTheme
 import com.example.myapplication.ui.theme.Purple200
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.isActive
@@ -870,7 +870,7 @@ fun content(value: Int) {
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun TTPreview() {
-    CustomApplicationTheme {
-        drawContent(imgId = R.drawable.ic_launcher_foreground)
+    LightDarkTheme {
+        drawContent(imgId = R.drawable.ic_launcher_background)
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.myapplication">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -27,6 +27,7 @@
         <activity android:name=".ui.CollapsingActiivty"/>
         <activity android:name=".ui.BottomBar_PagerActivity"/>
         <activity android:name=".ui.NavigationActivity"/>
+        <activity android:name=".ui.PreviewByViewmodelActivity"/>
     </application>
 
 </manifest>

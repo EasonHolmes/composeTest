@@ -26,12 +26,14 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
+import com.google.accompanist.insets.statusBarsHeight
 import kotlin.math.hypot
 
 /**
@@ -43,28 +45,38 @@ fun backTopbar(
     title: String,
     titleClick: () -> Unit = {},
     backClick: () -> Unit,
+    color: Color = MaterialTheme.colors.onPrimary,
     @DrawableRes imgResource: Int = R.mipmap.ic_back_black,
 ) {
-    TopAppBar(
-//        backgroundColor = MaterialTheme.colors.,
-        elevation = 5.dp,
-        title = {
-            TextButton(onClick = titleClick) {
-                Text(text = title)
+    Column() {
+        Spacer(
+            modifier = Modifier
+                .background(color)
+                .statusBarsHeight()//设置状态栏高度
+                .fillMaxWidth()
+        )
+        TopAppBar(
+            backgroundColor = color,
+            elevation = 0.dp,
+            title = {
+                TextButton(onClick = titleClick) {
+                    Text(text = title)
+                }
+            },
+            navigationIcon = {
+                IconButton(
+                    modifier = Modifier
+                        .width(30.dp)
+                        .height(30.dp), onClick = backClick
+                ) {
+                    Icon(
+                        painter = painterResource(id = imgResource), contentDescription = "", tint = Color.White
+                    )
+                }
             }
-        },
-        navigationIcon = {
-            IconButton(
-                modifier = Modifier
-                    .width(30.dp)
-                    .height(30.dp), onClick = backClick
-            ) {
-                Icon(
-                    painter = painterResource(id = imgResource), contentDescription = ""
-                )
-            }
-        }
-    )
+        )
+    }
+
 }
 
 @Composable

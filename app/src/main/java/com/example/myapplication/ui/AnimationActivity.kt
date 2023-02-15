@@ -15,7 +15,7 @@ class AnimationActivity : BaseActivity() {
 
     @Composable
     override fun ContentView() {
-        drawContent(imgId = R.drawable.ic_launcher_foreground, this)
+        drawContent(imgId = R.drawable.ic_launcher_background, this)
         Log.e(
             "ethan",
             File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).path + "/rx_mode.tag").exists()

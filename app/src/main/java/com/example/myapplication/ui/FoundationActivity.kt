@@ -2,6 +2,7 @@ package com.example.myapplication.ui
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -13,6 +14,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.*
@@ -20,16 +22,24 @@ import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
+import com.example.myapplication.ui.mytheme.LightDarkTheme
+import com.example.myapplication.ui.vm.ExampleUiData
+import com.example.myapplication.ui.vm.ExampleUiState
+import com.example.myapplication.ui.vm.SingleLivedata
 import com.example.myapplication.ui.vm.TestViewModel
 import com.example.myapplication.ui.widget.GradientButton
 import com.example.myapplication.ui.widget.GradientButton2
 import com.example.myapplication.ui.widget.createCircularReveal
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
  * Created by Ethan Cui on 2022/10/28
  */
 class FoundationActivity : BaseActivity() {
+    private val mViewmodel: TestViewModel by lazy {
+        ViewModelProvider(this)[TestViewModel::class.java]
+    }
     private val verticalGradientBrush = Brush.horizontalGradient(
         colors = listOf(
             Color(0xFFB9A29C),
@@ -45,9 +55,16 @@ class FoundationActivity : BaseActivity() {
     val gradient =
         Brush.horizontalGradient(listOf(Color(0xFFC6E270), Color(0xFF00BEB2)))
 
+
+    @Preview(showSystemUi = true)
+    @Composable
+    private fun PreviewUI() {
+        TestButtons(MutableStateFlow(ExampleUiData("content")), SingleLivedata())
+    }
+
     @Composable
     override fun ContentView() {
-        TestButtons()
+        TestButtons(mViewmodel.uiEvent,mViewmodel.uiViewEvent)
     }
 
     override fun getActTtitle(): String {
@@ -57,15 +74,18 @@ class FoundationActivity : BaseActivity() {
     //委托形式初始化viewmodel 同页面下的Composeable的viewmodel如果已经初始化会返回同一个
     @OptIn(ExperimentalLifecycleComposeApi::class)
     @Composable
-    fun TestButtons(viewmodel: TestViewModel = viewModel()) {
+    fun TestButtons(
+        uiEvent: MutableStateFlow<ExampleUiData>,
+        uiViewEvent: SingleLivedata<ExampleUiState>
+    ) {
         Log.e("ethan", "TestButtons===")
-        val stateData2 by viewmodel.uiEvent.collectAsStateWithLifecycle()
+        val stateData2 by uiEvent.collectAsStateWithLifecycle()
 
         Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center) {
             Button(modifier = Modifier.align(alignment = Alignment.CenterHorizontally), onClick = {
                 TestDialog().show(this@FoundationActivity.supportFragmentManager, "dialog")
             }) {
-                Text(text = "dialog \n mutableStateOf、 eventLivedata ChangeUI")
+                Text(text = "dialog \n mutableStateOf、 eventLivedata ChangeUI.....")
             }
             // Holds state
             GradientButton(
@@ -78,7 +98,7 @@ class FoundationActivity : BaseActivity() {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 onClick = {
-                    viewmodel.changeData()
+                    changeData()
                 }
             ) {
                 Text(text = "渐变button-fillMaxWidth==${stateData2.content}")
@@ -93,39 +113,34 @@ class FoundationActivity : BaseActivity() {
                 Text(text = "使用系统button增加渐变属性，渐变button - Wrap Width")
             }
             CircularRevealAnima()
-            MaterialButton()
+            MaterialButton(uiViewEvent)
 
-            // widget.ImageView
-//                AndroidView(factory = { ctx ->
-//                    //  Initialize a View or View hierarchy here
-//                    TextView(ctx).apply {
-//                        layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-//                    }
-//                }, update = {
-//                    // Update TextView with the current state value
-//                    it.text = "You have clicked the buttons: " + state.value.toString() + " times"
-//                })
         }
     }
 
-    @Composable
-    fun MaterialButton(viewmodel: TestViewModel = viewModel()) {
-        Log.e("ethan", "TestButtons===22")
-        val stateData = viewmodel.uiViewEvent.observeAsState()
+    private fun changeData() {
+        mViewmodel.changeData()
+    }
 
-        androidx.compose.material3.Button(onClick = {
-            viewmodel.changeData()
+    @Composable
+    fun MaterialButton(uiViewEvent: SingleLivedata<ExampleUiState>) {
+        Log.e("ethan", "TestButtons===22")
+        val stateData = uiViewEvent.observeAsState()
+
+        Button(onClick = {
+//            viewmodel.changeData(33)
         }) {
-            androidx.compose.material3.Text(
+            Text(
                 text = stateData.value?.exampleUiData?.content
                     ?: "click me singleLiveData ViewModel changeUI"
             )
         }
     }
+
     @Composable
-    fun CircularRevealAnima(){
+    fun CircularRevealAnima() {
         Column {
-            LocalView.current.createCircularReveal()//把当前的compose转成view，也就是整个页面的
+//            LocalView.current.createCircularReveal()//把当前的compose转成view，也就是整个页面的
             Image(
                 painter = painterResource(id = R.mipmap.jinzhu_icon),
                 modifier = Modifier

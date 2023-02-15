@@ -8,14 +8,14 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.myapplication.ui.mytheme.CustomApplicationTheme
+import com.example.myapplication.ui.mytheme.LightDarkTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            CustomApplicationTheme() {
+            LightDarkTheme() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -36,7 +36,7 @@ fun Greeting(name: String) {
 @Preview(showBackground =true, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    CustomApplicationTheme() {
+    LightDarkTheme() {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colors.background
