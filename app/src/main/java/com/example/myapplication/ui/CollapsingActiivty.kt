@@ -2,6 +2,7 @@ package com.example.myapplication.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,27 +26,30 @@ class CollapsingActiivty : BaseActivity() {
     @Composable
     override fun ContentView() {
         val items = (1..100).map { "Item $it" }.toMutableList()
-        CollapsingEffectScreen(items = items, header = {
-            Image(
-                painter = painterResource(id = R.mipmap.toolbar_background),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-            )
-        }, itemContent = { index, item ->
-            Text(
-                text = item,
-                Modifier
-                    .background(Color.White)
-                    .fillMaxWidth()
-                    .padding(8.dp)
-            )
-        })
+        Column() {
+            CollapsingEffectScreen(items = items, header = {
+                Image(
+                    painter = painterResource(id = R.mipmap.toolbar_background),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                )
+            }, itemContent = { index, item ->
+                Text(
+                    text = item,
+                    Modifier
+                        .background(Color.White)
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                )
+            })
+        }
+
     }
 
-    override fun getActTtitle(): String {
-        return "collapsing"
+    override fun needTopbar(): Boolean {
+        return false
     }
 }

@@ -23,7 +23,7 @@ class AnimationActivity : BaseActivity() {
         )
     }
 
-    override fun needScaffold(): Boolean {
+    override fun needTopbar(): Boolean {
         return false
     }
 

@@ -70,13 +70,24 @@ fun backTopbar(
                         .height(30.dp), onClick = backClick
                 ) {
                     Icon(
-                        painter = painterResource(id = imgResource), contentDescription = "", tint = Color.White
+                        painter = painterResource(id = imgResource),
+                        contentDescription = "",
+                        tint = Color.White
                     )
                 }
             }
         )
     }
+}
 
+@Composable
+fun StatusbarSpacer() {
+    Spacer(
+        modifier = Modifier
+            .background(MaterialTheme.colors.onPrimary)
+            .statusBarsHeight()//设置状态栏高度
+            .fillMaxWidth()
+    )
 }
 
 @Composable

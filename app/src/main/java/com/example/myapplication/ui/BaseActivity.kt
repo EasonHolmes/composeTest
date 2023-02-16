@@ -2,7 +2,6 @@ package com.example.myapplication.ui
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.annotation.ContentView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,16 +10,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import com.example.myapplication.R
 import com.example.myapplication.ui.mytheme.LightDarkTheme
 import com.example.myapplication.ui.widget.backTopbar
-import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -70,7 +62,7 @@ abstract class BaseActivity : AppCompatActivity() {
             }
             LightDarkTheme {
                 ProvideWindowInsets {
-                    if (needScaffold()) {
+                    if (needTopbar()) {
                         Scaffold(topBar = {
                             backTopbar(
                                 title = getActTtitle(),
@@ -84,25 +76,25 @@ abstract class BaseActivity : AppCompatActivity() {
                             }
                         )
                     } else {
-                        Column() {
-                            Spacer(
-                                modifier = Modifier
-                                    .background(MaterialTheme.colors.onPrimary)
-                                    .statusBarsHeight()//设置状态栏高度
-                                    .fillMaxWidth()
-                            )
+//                        Column() {
+//                            Spacer(
+//                                modifier = Modifier
+//                                    .background(MaterialTheme.colors.onPrimary)
+//                                    .statusBarsHeight()//设置状态栏高度
+//                                    .fillMaxWidth()
+//                            )
                             ContentView()
-                        }
+//                        }
                     }
                 }
             }
         }
     }
 
-    protected open fun needScaffold(): Boolean = true
+    protected open fun needTopbar(): Boolean = true
 
     @Composable
     abstract fun ContentView()
 
-    open fun getActTtitle(): String = this::class.java.simpleName
+    protected open fun getActTtitle(): String = this::class.java.simpleName
 }
