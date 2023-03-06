@@ -43,6 +43,8 @@ object IconUtils {
             )
         } catch (e: Exception) {
         }
+        h(cxt, g(cxt))
+
     }
 
     /**

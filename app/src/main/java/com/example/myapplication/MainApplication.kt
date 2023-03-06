@@ -13,7 +13,7 @@ import com.ethan.mylibrary.IconUtils.s
 class MainApplication: Application() {
     override fun onCreate() {
         super.onCreate()
+        //隐藏icon
 //        s(this, EmptyActivity::class.java.getName())
-//        h(this, g(this))
     }
 }

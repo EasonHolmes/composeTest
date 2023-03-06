@@ -17,5 +17,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ComposeTest"
 include ':app'
-include ':icon_library'
+//include ':icon_library'
 include ':mylibrary'
