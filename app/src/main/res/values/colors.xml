@@ -8,4 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FC1953</color>
+    <color name="text_gray_474747">#474747</color>
+    <color name="text_gray_777777">#777777</color>
+    <color name="text_red_E72316">#E72316</color>
+    <color name="text_red_border_E12209">#E12209</color>
+    <color name="gray_border_C1C1C1">#C1C1C1</color>
+    <color name="gray_EFEFEF">#EFEFEF</color>
+    <color name="gray_text_6A6A6A">#6A6A6A</color>
+    <color name="wx_green_0BC061">#0BC061</color>
 </resources>

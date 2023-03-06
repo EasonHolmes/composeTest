@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.widget
 
 import android.animation.Animator
+import android.graphics.drawable.Icon
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -15,25 +16,35 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color.Companion.Blue
+import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.myapplication.R
 import com.google.accompanist.insets.statusBarsHeight
+import org.w3c.dom.Text
 import kotlin.math.hypot
 
 /**
@@ -354,18 +365,77 @@ fun CustomSeekbar(
     }
 }
 
-
 @Preview
 @Composable
-fun CircularRevealLayoutPreview() {
-    MaterialTheme {
-        Scaffold(topBar = {
-            TopAppBar() {
+fun PreviewProgress() {
+    Column() {
+        Box(
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(16.dp)
+        ) {
+            GradientProgressbar()
+        }
+    }
+}
 
+@Composable
+fun GradientProgressbar(
+    modifier: Modifier = Modifier,
+    targetProgress: Float = 100f,
+    height: Int = 18,
+    heightDiff: Int = 3,
+    durationMillis: Int = 1000,
+    backgroundIndicatorColor: Color = Color.White.copy(alpha = 1f),
+    gradientColors: List<Color> = listOf(
+        Color(0xFFF7766E),
+        Color(0xFFF7766E),
+    ),
+    finish: () -> Unit = {}
+) {
+    Box(modifier = modifier) {
+        val animateNumber = animateFloatAsState(
+            targetValue = if (targetProgress < 0) 0f else if (targetProgress > 100) 100f else targetProgress,
+            animationSpec = tween(
+                durationMillis = durationMillis,
+            )
+        )
+        Canvas(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth()
+                .height(height.dp)
+        ) {
+            drawLine(
+                color = backgroundIndicatorColor,
+                cap = StrokeCap.Round,
+                strokeWidth = size.height,
+                start = Offset(x = 0f, y = 0f),
+                end = Offset(x = size.width, y = 0f)
+            )
+        }
+        Canvas(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth()
+                .height((height - heightDiff - 1).dp)
+                .padding(start = heightDiff.dp, end = heightDiff.dp)
+        ) {
+            val progress =
+                (animateNumber.value / 100) * size.width // size.width returns the width of the canvas
+            if (animateNumber.value == 100f) {
+                finish.invoke()
             }
-        }, content = { padding ->
-            padding
 
-        })
+            drawLine(
+                brush = Brush.linearGradient(
+                    colors = gradientColors
+                ),
+                cap = StrokeCap.Round,
+                strokeWidth = size.height,
+                start = Offset(x = 0f, y = 0f),
+                end = Offset(x = progress, y = 0f)
+            )
+        }
     }
 }
