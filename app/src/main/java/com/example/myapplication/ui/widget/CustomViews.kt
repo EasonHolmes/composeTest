@@ -287,11 +287,34 @@ class ArcShape(private val progress: Int, val listener: (progress: Int) -> Unit 
         return Outline.Generic(path)
     }
 }
+//自定义可拖动进度条 0.0f-100f
+@Composable
+fun CustomProgressBar(
+    modifier: Modifier,
+    progress: Float,
+    onProgressChanged: (Float) -> Unit,
+    progressColor: Color = Color.White,
+    thumbColor: Color = Color.Gray.copy(alpha = 0.5f)
+) {
+    Slider(
+        modifier = modifier,
+        value = progress,
+        onValueChange = onProgressChanged,
+        valueRange = 0f..100f,
+        colors = SliderDefaults.colors(
+            thumbColor = progressColor,//圆点颜色
+            activeTrackColor = progressColor,//已经走了的进度颜色
+            inactiveTrackColor = thumbColor//没有走的进度颜色
+        )
+    )
+}
 
-
+//自定义可拖动进度条
 @Composable
 fun CustomSeekbar(
     modifier: Modifier,
+    backgroundIndicatorColor: Color =Color.Gray.copy(alpha = 0.5f),
+    indicatorColor:Color=Color.White,
     onProgressChanged: (progress: Float) -> Unit
 ) {
     // 当前进度，范围0-1之间， 初始为0
@@ -338,26 +361,27 @@ fun CustomSeekbar(
                     detectTapGestures(onTap = {
                         progress = (it.x / size.width)
                         barPressed = false
+                        onProgressChanged.invoke(progress)
                     })
                 },
             onDraw = {
                 // 底部灰色线条
                 drawLine(
-                    color = Color.Gray.copy(alpha = 0.5f),
+                    color = backgroundIndicatorColor,
                     start = Offset(0f, size.height / 2),
                     end = Offset(size.width, size.height / 2),
                     strokeWidth = 8f
                 )
                 // 顶部蓝色线条
                 drawLine(
-                    color = Color.Blue,
+                    color = indicatorColor,
                     start = Offset(0f, size.height / 2),
                     end = Offset(size.width * progress, size.height / 2),
                     strokeWidth = 12f
                 )
                 // 锚点
                 drawCircle(
-                    color = Color.Blue,
+                    color =  indicatorColor,
                     radius = radius,
                     center = Offset(size.width * progress, size.height / 2)
                 )

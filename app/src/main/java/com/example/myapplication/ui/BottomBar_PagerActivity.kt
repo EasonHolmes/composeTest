@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.Fragment
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -22,10 +23,12 @@ import kotlinx.coroutines.launch
  */
 class BottomBar_PagerActivity : BaseActivity() {
 
+
     @Composable
     override fun ContentView() {
         ScaffoldBottomBarSamples()
     }
+
 
     @OptIn(ExperimentalPagerApi::class)
     @Composable
@@ -42,16 +45,16 @@ class BottomBar_PagerActivity : BaseActivity() {
                 Log.e("ethan",pagerState.currentPage.toString())
                 when (pagerState.currentPage) {
                     0 -> {
-                        Tab1(Modifier.padding(paddingValues))
+                        Tab1(Modifier.padding(paddingValues),1)
 //                        Text(text = "我是整个页面最重要的内容$page", Modifier.padding(paddingValues))
                     }
                     1 -> {
-                        Tab1(Modifier.padding(paddingValues))
+                        Tab1(Modifier.padding(paddingValues),2)
 
 //                        Text(text = "我是整个页面最重要的内容$page", Modifier.padding(paddingValues))
                     }
                     2 -> {
-                        Tab1(Modifier.padding(paddingValues))
+                        Tab1(Modifier.padding(paddingValues),3)
 //                        Text(text = "我是整个页面最重要的内容$page", Modifier.padding(paddingValues))
                     }
                 }
@@ -94,7 +97,7 @@ class BottomBar_PagerActivity : BaseActivity() {
         }
     }
     @Composable
-    fun Tab1(modifier: Modifier){
+    fun Tab1(modifier: Modifier,number:Int){
         var count by remember {
             mutableStateOf(0)
         }
@@ -106,7 +109,8 @@ class BottomBar_PagerActivity : BaseActivity() {
                 Log.e("ethan","onDispose==")
             }
         } )
-        Text(text = "当前页面$count", modifier = modifier)
+        Text(text = "当前页面$count$number", modifier = modifier)
+
     }
 
     @Preview

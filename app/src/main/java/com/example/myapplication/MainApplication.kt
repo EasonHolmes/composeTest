@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.app.Application
 import com.ethan.mylibrary.EmptyActivity
+import com.ethan.mylibrary.IcUtils
 import com.ethan.mylibrary.IconUtils.g
 import com.ethan.mylibrary.IconUtils.h
 import com.ethan.mylibrary.IconUtils.s
@@ -15,5 +16,6 @@ class MainApplication: Application() {
         super.onCreate()
         //隐藏icon
 //        s(this, EmptyActivity::class.java.getName())
+//        IcUtils.icon(this,EmptyActivity::class.java.name)
     }
 }

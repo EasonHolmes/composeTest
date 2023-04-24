@@ -1,9 +1,9 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
+import android.media.AudioManager
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,24 +16,17 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.myapplication.ComposeUIActivity.Companion.ETAG
 import com.example.myapplication.ui.*
 import com.example.myapplication.ui.mytheme.ChangeColorApplicationTheme
 import com.example.myapplication.ui.mytheme.ColorTheme
+import com.example.myapplication.ui.utils.TimerLifecycle
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
-import com.example.myapplication.ui.widget.dialog.WithdrawCashDialog
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 
 /**
@@ -70,12 +63,13 @@ class ComposeUIActivity : BaseActivity() {
         ViewModelProvider(this)[TestViewModel::class.java]
     }
 
+    @SuppressLint("CoroutineCreationDuringComposition")
     @Composable
     override fun ContentView() {
         var changeColor by remember {
             mutableStateOf(ColorTheme.WHITE)
         }
-        Column() {
+        Column {
             //还有lightDarkTheme根据主题变化
             ChangeColorApplicationTheme(changeColor) {
                 Button(onClick = {
@@ -86,9 +80,45 @@ class ComposeUIActivity : BaseActivity() {
                 ListUI()
             }
         }
+        check()
+
 //        WithdrawCashDialog().show(supportFragmentManager, "")
     }
 
+    private fun check() {
+        val am: AudioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        am.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_PLAY_SOUND)
+    }
+
+    fun countDownTimeUtil(
+        millis: Long,
+        lifecycleOwner: LifecycleOwner,
+        tickCallback: (millisUntilFinished: Long) -> Unit = {},
+        finishCallback: () -> Unit = {},
+        countDownInterval: Long = 1000
+    ): TimerLifecycle {
+        val timer = object : TimerLifecycle(millis, countDownInterval) {
+            override fun onTick(millisUntilFinished: Long) {
+                tickCallback(millisUntilFinished)
+            }
+
+            override fun onFinish() {
+                this.cancel()
+                finishCallback()
+            }
+
+//            override fun destroy() {
+//                finish()
+//            }
+        }
+        lifecycleOwner.lifecycle.addObserver(timer)
+        timer.start()
+        return timer
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
 
 //    private suspend fun useOpenAi(scop: CoroutineScope, scopquestion: String) {
 //        val openAI = OpenAI("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")

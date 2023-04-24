@@ -21,6 +21,7 @@ import androidx.constraintlayout.compose.*
 import androidx.constraintlayout.compose.layoutId
 import com.example.myapplication.R
 import com.example.myapplication.ui.widget.ClickColumn
+import com.example.myapplication.ui.widget.CustomProgressBar
 import com.example.myapplication.ui.widget.CustomSeekbar
 
 /**
@@ -283,13 +284,15 @@ class MotionLayoutActivity : BaseActivity() {
             CustomSeekbar(modifier = Modifier.layoutId("progress"), onProgressChanged = {
                 progressValue = it
             })
-//            Slider(value = progressValue, onValueChange = {
-//                progressValue = it
-//            }, valueRange = 0f..1f, steps = 100, modifier = Modifier.layoutId("progress"),
-//                colors =  SliderDefaults.colors(
-//                    thumbColor = Color.Black,
-//                )
-//            )
+            //使用
+            var progress by remember { mutableStateOf(50f) }
+            CustomProgressBar(
+                Modifier,
+                progress = progress,
+                onProgressChanged = { newProgress ->
+                    progress = newProgress
+                },
+            )
         }
 
     }
