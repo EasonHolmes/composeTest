@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.*
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.R
@@ -72,7 +71,6 @@ class FoundationActivity : BaseActivity() {
     }
 
     //委托形式初始化viewmodel 同页面下的Composeable的viewmodel如果已经初始化会返回同一个
-    @OptIn(ExperimentalLifecycleComposeApi::class)
     @Composable
     fun TestButtons(
         uiEvent: MutableStateFlow<ExampleUiData>,

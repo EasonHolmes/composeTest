@@ -1,9 +1,10 @@
 package com.example.myapplication.ui.widget
 
-import android.content.Context
 import android.content.Intent
 import android.os.Handler
+import android.util.DisplayMetrics
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -43,13 +44,14 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
+
 /**
  * Created by Ethan Cui on 2022/3/11
  */
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun drawContent(imgId: Int, context: Context? = null) {
+fun drawContent(imgId: Int, context: AppCompatActivity) {
 //    val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Open))
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -304,7 +306,7 @@ fun drawContent(imgId: Int, context: Context? = null) {
             ) {
                 content(value = value)
                 UploadAnimation()
-                AnimationAsStateAndAnimateTo()
+                AnimationAsStateAndAnimateTo(context)
                 AnimatedContentTest()
                 SizeChangeAnimatedContent()
                 ExpandInAnimation()
@@ -566,7 +568,7 @@ fun AnimatedContentTest() {
 
 
 @Composable
-fun AnimationAsStateAndAnimateTo() {
+fun AnimationAsStateAndAnimateTo(context: AppCompatActivity) {
     var flag by remember { mutableStateOf(false) }
     val animate = remember { Animatable(0.dp, Dp.VectorConverter) }
     // 通过协程触发 animateTo()
@@ -580,7 +582,9 @@ fun AnimationAsStateAndAnimateTo() {
             Log.e("ethan", "dp=====" + this.value)
         })
     }
-    val size2 by animateSizeAsState(if (flag) Size(40f, 40f) else Size(120f, 60f),
+
+
+    val size2 by animateSizeAsState(if (flag) Size(40f,40f ) else Size(120f, 60f),
         tween(1000, easing = FastOutLinearInEasing), finishedListener = {
             // 可以设置动画结束的监听函数，回调动画结束时对应属性的目标值
             Log.e("ethan", "size animate finished with $it")
@@ -813,9 +817,11 @@ fun UploadAnimation() {
                         UploadState.Normal -> {
                             UploadState.Uploading
                         }
+
                         UploadState.Uploading -> {
                             UploadState.Success
                         }
+
                         UploadState.Success -> {
                             UploadState.Normal
                         }
@@ -871,6 +877,6 @@ fun content(value: Int) {
 @Composable
 fun TTPreview() {
     LightDarkTheme {
-        drawContent(imgId = R.drawable.ic_launcher_background)
+//        drawContent(imgId = R.drawable.ic_launcher_background)
     }
 }

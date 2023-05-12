@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.myapplication.ui.vm.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +37,6 @@ class PreviewByViewmodelActivity : BaseActivity() {
         ContentUi(viewmodel.uiViewEvent())
     }
 
-    @OptIn(ExperimentalLifecycleComposeApi::class)
     @Composable
     private fun ContentUi(
         uiEvent: MutableStateFlow<ExampleUiState2.StateData> = MutableStateFlow(
