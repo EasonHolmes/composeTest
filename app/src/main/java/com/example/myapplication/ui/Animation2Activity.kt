@@ -1,7 +1,5 @@
 package com.example.myapplication.ui
 
-import android.util.DisplayMetrics
-import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateSizeAsState
@@ -9,11 +7,9 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,17 +42,16 @@ class Animation2Activity : BaseActivity() {
             targetValue = Size(target.toFloat(), 0f),
             animationSpec = infiniteRepeatable(tween(durationMillis = 5000, easing = LinearEasing), repeatMode = RepeatMode.Restart),)
         Box(modifier = Modifier
-            .fillMaxWidth()
             .onGloballyPositioned {
-
-            }) {
+                target = -it.size.width
+            } .offset(x = LocalDensity.current.run { (anima.width).toDp()}),) {
             Text(
-                text = "asdfa", modifier = Modifier
-                    .offset(x = LocalDensity.current.run { (anima.width).toDp()}),
+                text = "asdfa", modifier = Modifier,
+//                    .offset(x = LocalDensity.current.run { (anima.width).toDp()}),
                 overflow = TextOverflow.Clip,
                 softWrap = false,
                 onTextLayout = {
-                    target =  -it.size.width
+//                    target =  -it.size.width
                 }
             )
         }
