@@ -83,7 +83,7 @@ class FoundationActivity : BaseActivity() {
             Button(modifier = Modifier.align(alignment = Alignment.CenterHorizontally), onClick = {
                 TestDialog().show(this@FoundationActivity.supportFragmentManager, "dialog")
             }) {
-                Text(text = "dialog \n mutableStateOf、 eventLivedata ChangeUI.....")
+                Text(text = "dialog \n mutableStateOf、 eventLivedata ChangeUI.....")//
             }
             // Holds state
             GradientButton(
