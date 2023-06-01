@@ -17,6 +17,8 @@ private val DarkColorPalette = darkColors(
     primaryVariant = Purple700,
     secondary = Teal200,
     onPrimary = Teal2000,
+    background = Color.Black,
+
 )
 
 @SuppressLint("ConflictingOnColor")
@@ -24,7 +26,8 @@ private val LightColorPalette = lightColors(
     primary = Purple500,
     primaryVariant = Purple700,
     secondary = Teal200,
-    onPrimary = Purple200
+    onPrimary = Purple200,
+    background = Color.White,
 
     /* Other default colors to override
     background = Color.White,

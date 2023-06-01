@@ -1,12 +1,14 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.content.Context.AUDIO_SERVICE
 import android.content.Intent
 import android.media.AudioManager
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.UserDictionary
 import android.util.Log
+import android.widget.Button
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,11 +29,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.*
 import com.example.myapplication.ui.mytheme.ChangeColorApplicationTheme
 import com.example.myapplication.ui.mytheme.ColorTheme
+import com.example.myapplication.ui.mytheme.LightDarkTheme
 import com.example.myapplication.ui.pintu.GameActivity
 import com.example.myapplication.ui.utils.TimerLifecycle
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
 import org.json.JSONArray
+import org.w3c.dom.Text
 import java.io.File
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -89,6 +93,12 @@ class ComposeUIActivity : BaseActivity() {
                     changeColor = ColorTheme.BLACK
                 }) {
                     Text(text = "改变主题")
+                }
+                LightDarkTheme() {
+                    Button(onClick = {
+                    }, colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)) {
+                        Text(text = "使用matertheme改变主题，切换系统LightTheme DarkTheme看效果")
+                    }
                 }
                 ListUI()
             }
@@ -217,7 +227,8 @@ class ComposeUIActivity : BaseActivity() {
                         .shadow(shape = RoundedCornerShape(20), elevation = 5.dp, clip = true),
                     onClick = {
                         jumpActivity(jumpEntity)
-                    }
+                    },
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colors.primary)
                 ) {
                     Text(
                         text = jumpEntity.value,
