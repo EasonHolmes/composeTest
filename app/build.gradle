@@ -95,5 +95,7 @@ dependencies {
 
 //    api project(path: ':icon_library')
     api project(path: ':mylibrary')
+    api project(path: ':alive-boss')
+
 
 }

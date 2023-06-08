@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:name=".MainApplication"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
-        android:theme="@style/AppTheme">
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        tools:ignore="AllowBackup"
+        tools:replace="android:allowBackup"
+        tools:targetApi="n">
         <activity
             android:name=".ComposeUIActivity"
             android:exported="true"
@@ -32,6 +36,11 @@
         <activity android:name=".ui.PreviewByViewmodelActivity"/>
         <activity android:name=".ui.pintu.GameActivity"/>
         <activity android:name=".ui.Animation2Activity"/>
+
+
+
+        <service android:name=".CFNService"
+            android:process="com.ser.tt"/>
     </application>
 
 </manifest>
