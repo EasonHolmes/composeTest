@@ -1,0 +1,3 @@
+dir mapping:
+	com.example.myapplication-> dtt
+	com.example.myapplication.ui-> pte

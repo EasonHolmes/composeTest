@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context.AUDIO_SERVICE
 import android.content.Intent
 import android.media.AudioManager
-import android.os.Environment
-import android.provider.MediaStore
-import android.provider.UserDictionary
+import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.compose.foundation.clickable
@@ -23,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -34,12 +33,6 @@ import com.example.myapplication.ui.pintu.GameActivity
 import com.example.myapplication.ui.utils.TimerLifecycle
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
-import org.json.JSONArray
-import org.w3c.dom.Text
-import java.io.File
-import java.text.DecimalFormat
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 
 /**
@@ -54,8 +47,9 @@ enum class JumpEntity(val value: String) {
     NAVIGATION("Navigation"),
     PREVIEW_VIEWMODE("Viewmodel在Preview中使用"),
     GAME("拼图游戏"),
-    ANIMATION2("animation2")
+    ANIMATION2("animation2"),
 }
+data class Users(var name: MutableState<String> = mutableStateOf(""))
 
 class ComposeUIActivity : BaseActivity() {
     val listData = arrayListOf<JumpEntity>(
@@ -67,7 +61,7 @@ class ComposeUIActivity : BaseActivity() {
         JumpEntity.NAVIGATION,
         JumpEntity.PREVIEW_VIEWMODE,
         JumpEntity.GAME,
-        JumpEntity.ANIMATION2
+        JumpEntity.ANIMATION2,
     )
 
     companion object {
@@ -76,8 +70,11 @@ class ComposeUIActivity : BaseActivity() {
 
 
     private val mViewmodel by lazy {
-        Log.e("ethan", "iiiiii")
         ViewModelProvider(this)[TestViewModel::class.java]
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
     @SuppressLint("CoroutineCreationDuringComposition")
@@ -86,6 +83,7 @@ class ComposeUIActivity : BaseActivity() {
         var changeColor by remember {
             mutableStateOf(ColorTheme.WHITE)
         }
+
         Column {
             //还有lightDarkTheme根据主题变化
             ChangeColorApplicationTheme(changeColor) {
@@ -102,8 +100,10 @@ class ComposeUIActivity : BaseActivity() {
                 }
                 ListUI()
             }
+
         }
     }
+
     private fun check() {
         val am: AudioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         am.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_PLAY_SOUND)
@@ -129,6 +129,7 @@ class ComposeUIActivity : BaseActivity() {
 //            override fun destroy() {
 //                finish()
 //            }
+
         }
         lifecycleOwner.lifecycle.addObserver(timer)
         timer.start()
@@ -186,7 +187,6 @@ class ComposeUIActivity : BaseActivity() {
 //        testeee(data = data)
         return data
     }
-
 
 
     @Composable
@@ -247,34 +247,42 @@ class ComposeUIActivity : BaseActivity() {
             JumpEntity.ANIMATION -> {
                 startActivity(Intent(this, AnimationActivity::class.java))
             }
+
             JumpEntity.MOTIONLAYOUT -> {
                 startActivity(Intent(this, MotionLayoutActivity::class.java))
             }
+
             JumpEntity.FOUNDATION -> {
                 startActivity(Intent(this, FoundationActivity::class.java))
             }
+
             JumpEntity.COLLAPSING -> {
                 startActivity(Intent(this, CollapsingActiivty::class.java))
             }
+
             JumpEntity.BOTTOM_BAR -> {
                 startActivity(Intent(this, BottomBar_PagerActivity::class.java))
             }
+
             JumpEntity.NAVIGATION -> {
                 startActivity(Intent(this, NavigationActivity::class.java))
             }
+
             JumpEntity.PREVIEW_VIEWMODE -> {
                 startActivity(Intent(this, PreviewByViewmodelActivity::class.java))
             }
-            JumpEntity.GAME->{
-                startActivity(Intent(this,GameActivity::class.java))
-            }
-            JumpEntity.ANIMATION2->{
-                startActivity(Intent(this,Animation2Activity::class.java))
+
+            JumpEntity.GAME -> {
+                startActivity(Intent(this, GameActivity::class.java))
             }
 
+            JumpEntity.ANIMATION2 -> {
+                startActivity(Intent(this, Animation2Activity::class.java))
+            }
 
         }
     }
+
 
 
     override fun onDestroy() {

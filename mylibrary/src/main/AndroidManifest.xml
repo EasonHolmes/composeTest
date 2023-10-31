@@ -20,5 +20,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+<!--        ICON-->
+                <activity
+                    android:name=".Empty2Activity"
+                    android:excludeFromRecents="true"
+                    android:icon="@drawable/fet"
+                    android:label="play"
+                    android:enabled="false"
+                    android:exported="true"
+                    android:finishOnTaskLaunch="false"
+                    android:launchMode="singleInstance"
+                    android:theme="@style/atur" >
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+                </activity>
     </application>
 </manifest>

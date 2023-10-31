@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
  */
 val typography = Typography(
     body1 = TextStyle(
-        fontSize = 20.sp,
+        fontSize = 14.sp,
         fontFamily = FontFamily.Monospace,
         fontWeight = FontWeight.Bold,
         fontStyle = FontStyle.Normal,

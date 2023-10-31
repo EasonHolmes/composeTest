@@ -1,6 +1,8 @@
 package com.example.myapplication.ui.widget
 
 import android.content.Intent
+import android.inputmethodservice.Keyboard
+import android.media.Image
 import android.os.Handler
 import android.util.DisplayMetrics
 import android.util.Log
@@ -25,14 +27,23 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
@@ -40,9 +51,12 @@ import com.example.myapplication.ui.FoundationActivity
 import com.example.myapplication.ui.TestDelay
 import com.example.myapplication.ui.mytheme.LightDarkTheme
 import com.example.myapplication.ui.theme.Purple200
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import org.w3c.dom.Text
 
 
 /**
@@ -81,7 +95,11 @@ fun drawContent(imgId: Int, context: AppCompatActivity) {
                     .verticalScroll(rememberScrollState())
             ) {
                 repeat(100) {
-                    Text(text = "抽屉组件中内容$it", modifier = Modifier.padding(top = 10.dp), Color.Gray)
+                    Text(
+                        text = "抽屉组件中内容$it",
+                        modifier = Modifier.padding(top = 10.dp),
+                        Color.Gray
+                    )
                 }
 
             }
@@ -141,8 +159,9 @@ fun drawContent(imgId: Int, context: AppCompatActivity) {
             // Show the button if the first visible item is past
             // the first item. We use a remembered derived state to
             // minimize unnecessary compositions
-            val showButton by remember {
+            val showButton by remember(listState) {
                 derivedStateOf {
+                    Log.e("ethan", "showButtonIndex===" + listState.firstVisibleItemIndex)
                     listState.firstVisibleItemIndex > 0
                 }
             }
@@ -305,6 +324,7 @@ fun drawContent(imgId: Int, context: AppCompatActivity) {
                     .verticalScroll(rememberScrollState())
             ) {
                 content(value = value)
+                Typewriter(delayMill = 120, text = "点击看打字机效果")
                 UploadAnimation()
                 AnimationAsStateAndAnimateTo(context)
                 AnimatedContentTest()
@@ -356,7 +376,6 @@ fun AnimateContentSizeDemo() {
 
 @Composable
 fun LoadMoreListHandler(listState: LazyListState, buffer: Int = 1, onLoaderMore: () -> Unit) {
-
     val loadMore = remember {
         derivedStateOf {
             val layoutInfo = listState.layoutInfo
@@ -381,6 +400,19 @@ fun LoadMoreListHandler(listState: LazyListState, buffer: Int = 1, onLoaderMore:
                 }
             }
     }
+//    LaunchedEffect(key1 = listState, block = {
+//        snapshotFlow{listState.firstVisibleItemIndex}
+//            .distinctUntilChanged().collect{
+//                Log.e("ethan","firstVisible===="+it)
+//            }
+//    })
+//    LaunchedEffect(key1 = listState, block = {
+//        snapshotFlow{listState.layoutInfo}
+//            .map {  (it.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1 }
+//            .distinctUntilChanged().collect{
+//                Log.e("ethan","lastVisible===="+it)
+//            }
+//    })
 }
 
 //布局切换动画
@@ -579,17 +611,26 @@ fun AnimationAsStateAndAnimateTo(context: AppCompatActivity) {
 //    }
     LaunchedEffect(key1 = flag) {
         animate.animateTo(if (flag) 32.dp else 144.dp, animationSpec = tween(1000), block = {
-            Log.e("ethan", "dp=====" + this.value)
+//            Log.e("ethan", "dp=====" + this.value)
         })
+
+        //无限循环的 https://developer.android.com/jetpack/compose/animation?hl=zh-cn#rememberinfinitetransition
+//        animate.animateTo(if (flag) 32.dp else 144.dp, animationSpec =   infiniteRepeatable(
+//            animation = tween(3000, easing = LinearEasing),
+//            repeatMode = RepeatMode.Restart
+//        ), block = {
+//            Log.e("ethan", "dp=====" + this.value)
+//        })
     }
 
 
-    val size2 by animateSizeAsState(if (flag) Size(40f,40f ) else Size(120f, 60f),
+    val size2 by animateSizeAsState(if (flag) Size(40f, 40f) else Size(120f, 60f),
         tween(1000, easing = FastOutLinearInEasing), finishedListener = {
             // 可以设置动画结束的监听函数，回调动画结束时对应属性的目标值
             Log.e("ethan", "size animate finished with $it")
-        })
-    val size by animateDpAsState(if (flag) 32.dp else 144.dp) { valueOnAnimateEnd ->
+        }, label = ""
+    )
+    val size by animateDpAsState(if (flag) 32.dp else 144.dp, label = "") { valueOnAnimateEnd ->
         // 可以设置动画结束的监听函数，回调动画结束时对应属性的目标值
         Log.e("ethan", "size animate finished with $valueOnAnimateEnd")
     }
@@ -741,9 +782,11 @@ fun UploadAnimation() {
             UploadState.Normal -> {
                 1f
             }
-            UploadState.Success->{
+
+            UploadState.Success -> {
                 1f
             }
+
             else -> {
                 0f
             }
@@ -756,9 +799,11 @@ fun UploadAnimation() {
             UploadState.Normal -> {
                 Color.Blue
             }
+
             UploadState.Uploading -> {
                 Color.Gray
             }
+
             UploadState.Success -> {
                 Color.Red
             }
@@ -769,12 +814,14 @@ fun UploadAnimation() {
     }) { target ->
         when (target) {
             UploadState.Normal -> {
-                text ="upload"
+                text = "upload"
                 originWidth
             }
+
             UploadState.Uploading -> {
                 circleSize
             }
+
             UploadState.Success -> {
                 text = "success"
                 originWidth
@@ -871,6 +918,48 @@ fun content(value: Int) {
             Text(text = "屏幕内容区域_有侧边栏$value")
         }
     }
+}
+
+@Composable
+fun Typewriter(
+    delayMill: Long,
+    onclick: () -> Unit = {},
+    text: String,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    fontStyle: FontStyle? = null,
+    fontWeight: FontWeight? = null,
+    fontFamily: FontFamily? = null,
+    letterSpacing: TextUnit = TextUnit.Unspecified,
+    textDecoration: TextDecoration? = null,
+    textAlign: TextAlign? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    overflow: TextOverflow = TextOverflow.Clip,
+    softWrap: Boolean = true,
+    maxLines: Int = Int.MAX_VALUE,
+    minLines: Int = 1,
+    onTextLayout: (TextLayoutResult) -> Unit = {},
+    style: TextStyle = LocalTextStyle.current
+) {
+
+    val scop = rememberCoroutineScope()
+    var content by remember {
+        mutableStateOf(text)
+    }
+    Text(text = content, modifier = Modifier
+        .clickable {
+            scop.launch {
+                content = ""
+                text.forEachIndexed { index, c ->
+                    delay(delayMill)
+                    content += c
+                }
+            }
+            onclick.invoke()
+        }
+        .then(modifier))
+
 }
 
 @Preview(showBackground = true, showSystemUi = true)

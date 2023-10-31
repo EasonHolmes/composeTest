@@ -1,6 +1,7 @@
 package com.example.myapplication.ui
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -10,8 +11,11 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
+import com.example.myapplication.R
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -67,9 +71,10 @@ class BottomBar_PagerActivity : BaseActivity() {
         val scope = rememberCoroutineScope()
         val bottomIcon =
             listOf(Icons.Default.Home, Icons.Default.Clear, Icons.Default.Call, Icons.Default.Email)
-        BottomNavigation() {
+        BottomNavigation {
             bottomNumber.forEachIndexed { index, contentText ->
                 BottomNavigationItem(
+                    modifier = Modifier.background(Color.Black),
                     selected = pagerState.currentPage == index,
                     onClick = {
                         scope.launch {
@@ -78,7 +83,7 @@ class BottomBar_PagerActivity : BaseActivity() {
                     }, label = {
                         Text(
                             text = contentText,
-                            color = if (pagerState.currentPage == index) Color.Black else Color.White
+                            color = if (pagerState.currentPage == index) Color.Blue else Color.White
                         )
                     }, icon = {
 //                            if (checkIndex == index) {
@@ -91,7 +96,7 @@ class BottomBar_PagerActivity : BaseActivity() {
 //                            } else {
                         Icon(imageVector = bottomIcon[index], contentDescription = null)
 //                            }
-                    }, selectedContentColor = Color.Black, unselectedContentColor = Color.White
+                    }, selectedContentColor = Color.Red, unselectedContentColor = Color.White
                 )
             }
         }
@@ -111,6 +116,37 @@ class BottomBar_PagerActivity : BaseActivity() {
         } )
         Text(text = "当前页面$count$number", modifier = modifier)
 
+    }
+
+    //非联动方式
+    @Composable
+    fun BottomNav() {
+//        val bottomNumber = listOf("首页", "清除", "电话")
+//        val bottomIcon =
+//            listOf(
+//                ImageVector.vectorResource(id = R.drawable.svg to xml),
+//                ImageVector.vectorResource(id = R.drawable.svg to xml),
+//                ImageVector.vectorResource(id = R.drawable.svg to xml),
+//            )
+//        BottomNavigation() {
+//            bottomNumber.forEachIndexed { index, contentText ->
+//                BottomNavigationItem(
+//                    modifier = Modifier.background(Color.White),
+//                    selected = currentPage.value == index,
+//                    onClick = {
+//                        currentPage.value = index
+//                    },
+//                    label = {
+//                        Text(
+//                            text = contentText,
+//                            color = if (currentPage.value == index) ThemeColor else TextGrayColor
+//                        )
+//                    }, icon = {
+//                        Icon(imageVector = bottomIcon[index], contentDescription = null)
+//                    }, selectedContentColor = ThemeColor, unselectedContentColor = TextGrayColor
+//                )
+//            }
+//        }
     }
 
     @Preview

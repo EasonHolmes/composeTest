@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.content.ContextCompat
 import com.at.ic.Ihelper
-import com.bossy.component.MultiProcess
 import com.ethan.mylibrary.Empty2Activity
 import com.ethan.mylibrary.EmptyActivity
 
