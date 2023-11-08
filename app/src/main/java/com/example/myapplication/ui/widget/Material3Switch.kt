@@ -62,12 +62,12 @@ import kotlinx.coroutines.launch
  * be interactable, unless something else handles its input events and updates its state.
  * @param modifier the [Modifier] to be applied to this switch
  * @param thumbContent content that will be drawn inside the thumb, expected to measure
- * [SwitchDefaults.IconSize]
+ * [SwitchMaterial3Defaults.IconSize]
  * @param enabled controls the enabled state of this switch. When `false`, this component will not
  * respond to user input, and it will appear visually disabled and disabled to accessibility
  * services.
- * @param colors [SwitchColors] that will be used to resolve the colors used for this switch in
- * different states. See [SwitchDefaults.colors].
+ * @param colors [SwitchMaterial3Colors] that will be used to resolve the colors used for this switch in
+ * different states. See [SwitchMaterial3Defaults.colors].
  * @param interactionSource the [MutableInteractionSource] representing the stream of [Interaction]s
  * for this switch. You can create and pass in your own `remember`ed instance to observe
  * [Interaction]s and customize the appearance / behavior of this switch in different states.
@@ -80,7 +80,7 @@ fun SwitchMaterial3(
     modifier: Modifier = Modifier,
     thumbContent: (@Composable () -> Unit)? = null,
     enabled: Boolean = true,
-    colors: SwitchColors = SwitchDefaults.colors(),
+    colors: SwitchMaterial3Colors = SwitchMaterial3Defaults.colors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val uncheckedThumbDiameter = if (thumbContent == null) {
@@ -162,7 +162,7 @@ fun SwitchMaterial3(
 private fun BoxScope.SwitchImpl(
     checked: Boolean,
     enabled: Boolean,
-    colors: SwitchColors,
+    colors: SwitchMaterial3Colors,
     thumbValue: State<Float>,
     thumbContent: (@Composable () -> Unit)?,
     interactionSource: InteractionSource,
@@ -244,9 +244,9 @@ private val AnimationSpec = TweenSpec<Float>(durationMillis = 100)
 /**
  * Contains the default values used by [SwitchMaterial3]
  */
-object SwitchDefaults {
+object SwitchMaterial3Defaults {
     /**
-     * Creates a [SwitchColors] that represents the different colors used in a [SwitchMaterial3] in
+     * Creates a [SwitchMaterial3Colors] that represents the different colors used in a [SwitchMaterial3] in
      * different states.
      *
      * @param checkedThumbColor the color used for the thumb when enabled and checked
@@ -299,7 +299,7 @@ object SwitchDefaults {
         disabledUncheckedIconColor: Color = Color.Black
             .copy(alpha = SwitchTokens.DisabledUnselectedIconOpacity)
             .compositeOver(MaterialTheme.colors.surface),
-    ): SwitchColors = SwitchColors(
+    ): SwitchMaterial3Colors = SwitchMaterial3Colors(
         checkedThumbColor = checkedThumbColor,
         checkedTrackColor = checkedTrackColor,
         checkedBorderColor = checkedBorderColor,
@@ -327,11 +327,11 @@ object SwitchDefaults {
 /**
  * Represents the colors used by a [SwitchMaterial3] in different states
  *
- * See [SwitchDefaults.colors] for the default implementation that follows Material
+ * See [SwitchMaterial3Defaults.colors] for the default implementation that follows Material
  * specifications.
  */
 @Immutable
-class SwitchColors internal constructor(
+class SwitchMaterial3Colors internal constructor(
     private val checkedThumbColor: Color,
     private val checkedTrackColor: Color,
     private val checkedBorderColor: Color,
@@ -419,7 +419,7 @@ class SwitchColors internal constructor(
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other == null || other !is SwitchColors) return false
+        if (other == null || other !is SwitchMaterial3Colors) return false
 
         if (checkedThumbColor != other.checkedThumbColor) return false
         if (checkedTrackColor != other.checkedTrackColor) return false

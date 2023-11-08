@@ -1,6 +1,6 @@
 package com.example.myapplication.ui
 
-import android.graphics.drawable.Icon
+import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateSizeAsState
@@ -15,8 +15,10 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -26,8 +28,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
-import com.example.myapplication.ui.widget.ChangeStatusCheckBox
-import com.example.myapplication.ui.widget.SwitchDefaults
+import com.example.myapplication.ui.widget.ChangeImageSwitch
+import com.example.myapplication.ui.widget.ChangeFontSwitch
+import com.example.myapplication.ui.widget.ChangeStatusSwitchDefault
+import com.example.myapplication.ui.widget.SwitchMaterial3Defaults
 import com.example.myapplication.ui.widget.SwitchMaterial3
 
 
@@ -38,17 +42,26 @@ class Animation2Activity : BaseActivity() {
 
     @Composable
     override fun ContentView() {
-        Column(Modifier.fillMaxSize().background(Color.Gray)) {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .background(Color.Black)
+        ) {
             ScrollText()
             FounctionMaterial3()
-            ChangeStatusCheckBox()
+            ChangeImageSwitch(beginLeft = true, startImageVector = Icons.Default.Check, endImageVector = Icons.Default.Clear, leftOrRight = {
+                Log.e("ethan", "left111===$it")
+            })
+            ChangeFontSwitch(beginLeft = true, startContent = "℃", endContent = "℉", leftOrRight = {
+                Log.e("ethan", "left222===$it")
+            }, colors = ChangeStatusSwitchDefault.colors(thumbColor = Color.White))
         }
     }
 
     @Composable
     private fun ScrollText() {
         var target by remember {
-            mutableStateOf(resources.displayMetrics.widthPixels + 120)
+            mutableIntStateOf(resources.displayMetrics.widthPixels + 120)
         }
         val anima by animateSizeAsState(
             targetValue = Size(target.toFloat(), 0f),
@@ -88,7 +101,7 @@ class Animation2Activity : BaseActivity() {
             thumbContent = {
                 Icon(imageVector = Icons.Default.Check, contentDescription = "")
             },
-            colors = SwitchDefaults.colors(
+            colors = SwitchMaterial3Defaults.colors(
                 uncheckedBorderColor = Color.Green,
                 checkedBorderColor = Color.Red,
                 checkedTrackColor = Color.Cyan,
