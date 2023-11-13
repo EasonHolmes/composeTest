@@ -424,7 +424,7 @@ private fun ChangeNormalSwitchImp(
     }
     LaunchedEffect(key1 = offsetX, block = {
         if (offsetX == align || offsetX == moveWidth)
-            leftOrRight(offsetX == align)
+            leftOrRight(offsetX != align)
     })
 }
 
