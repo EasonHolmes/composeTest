@@ -9,7 +9,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -28,8 +30,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import com.example.myapplication.ui.widget.ChangeImageSwitch
 import com.example.myapplication.ui.widget.ChangeFontSwitch
+import com.example.myapplication.ui.widget.ChangeNormalSwitch
 import com.example.myapplication.ui.widget.ChangeStatusSwitchDefault
 import com.example.myapplication.ui.widget.SwitchMaterial3Defaults
 import com.example.myapplication.ui.widget.SwitchMaterial3
@@ -49,12 +53,27 @@ class Animation2Activity : BaseActivity() {
         ) {
             ScrollText()
             FounctionMaterial3()
-            ChangeImageSwitch(beginLeft = true, startImageVector = Icons.Default.Check, endImageVector = Icons.Default.Clear, leftOrRight = {
-                Log.e("ethan", "left111===$it")
-            })
+            ChangeImageSwitch(
+                beginLeft = true,
+                startImageVector = Icons.Default.Check,
+                endImageVector = Icons.Default.Clear,
+                leftOrRight = {
+                    Log.e("ethan", "left111===$it")
+                })
             ChangeFontSwitch(beginLeft = true, startContent = "℃", endContent = "℉", leftOrRight = {
                 Log.e("ethan", "left222===$it")
-            }, colors = ChangeStatusSwitchDefault.colors(thumbColor = Color.White))
+            }, colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White))
+            Spacer(modifier = Modifier.height(15.dp))
+            ChangeNormalSwitch(
+                beginLeft = true,
+                leftOrRight = {
+                    Log.e("ethan", "left222===$it")
+                },
+                colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White,),
+                width = 120.dp,
+                height = 30.dp,
+            )
+
         }
     }
 
@@ -105,8 +124,8 @@ class Animation2Activity : BaseActivity() {
                 uncheckedBorderColor = Color.Green,
                 checkedBorderColor = Color.Red,
                 checkedTrackColor = Color.Cyan,
-                uncheckedTrackColor = Color.Blue
-                , uncheckedThumbColor = Color.White,
+                uncheckedTrackColor = Color.Blue,
+                uncheckedThumbColor = Color.White,
 //                checkedThumbColor = Color.White,
             )
         )
