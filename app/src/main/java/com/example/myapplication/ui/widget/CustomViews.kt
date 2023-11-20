@@ -422,7 +422,7 @@ fun GradientProgressbar(
             targetValue = if (targetProgress < 0) 0f else if (targetProgress > 100) 100f else targetProgress,
             animationSpec = tween(
                 durationMillis = durationMillis,
-            )
+            ), label = ""
         )
         Canvas(
             modifier = Modifier
