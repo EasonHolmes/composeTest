@@ -3,7 +3,10 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import android.content.Context.AUDIO_SERVICE
 import android.content.Intent
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.media.AudioManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -21,10 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.test.internal.util.LogUtil
 import com.example.myapplication.ui.*
 import com.example.myapplication.ui.mytheme.ChangeColorApplicationTheme
 import com.example.myapplication.ui.mytheme.ColorTheme
@@ -33,6 +38,12 @@ import com.example.myapplication.ui.pintu.GameActivity
 import com.example.myapplication.ui.utils.TimerLifecycle
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
+import com.google.gson.Gson
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -49,6 +60,7 @@ enum class JumpEntity(val value: String) {
     GAME("拼图游戏"),
     ANIMATION2("animation2"),
 }
+
 data class Users(var name: MutableState<String> = mutableStateOf(""))
 
 class ComposeUIActivity : BaseActivity() {
@@ -75,6 +87,22 @@ class ComposeUIActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.e("ethan", lifecycle.currentState.name)
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.e("ethan", lifecycle.currentState.name)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e("ethan", lifecycle.currentState.name)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("ethan", lifecycle.currentState.name)
     }
 
     @SuppressLint("CoroutineCreationDuringComposition")
@@ -134,10 +162,6 @@ class ComposeUIActivity : BaseActivity() {
         lifecycleOwner.lifecycle.addObserver(timer)
         timer.start()
         return timer
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
 //    private suspend fun useOpenAi(scop: CoroutineScope, scopquestion: String) {
@@ -284,10 +308,5 @@ class ComposeUIActivity : BaseActivity() {
     }
 
 
-
-    override fun onDestroy() {
-        Log.e("ethan", "onDestroy");
-        super.onDestroy()
-    }
 }
 

@@ -30,8 +30,8 @@ android {
         applicationId "com.example.myapplication"
         minSdk 21
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -74,16 +74,16 @@ android {
 
 dependencies {
 //    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation "androidx.compose.ui:ui:1.5.3"
-    implementation "androidx.compose.foundation:foundation:1.5.3"
-    implementation "androidx.compose.material:material:1.5.3"
+    implementation "androidx.compose.ui:ui:$rootProject.compose_version"
+    implementation "androidx.compose.foundation:foundation:$rootProject.compose_version"
+    implementation "androidx.compose.material:material:$rootProject.compose_version"
 //    implementation "androidx.compose.material3:material3:1.1.2"
     implementation "androidx.compose.ui:ui-tooling-preview:$rootProject.compose_version"
 //    implementation "androidx.compose.ui:ui-util:$compose_version"
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
     //    //BottomNavigation rememberPagerState
-    implementation "com.google.accompanist:accompanist-pager:0.28.0"
-    implementation "androidx.navigation:navigation-compose:2.7.4"
+    implementation "com.google.accompanist:accompanist-pager:0.30.1"
+    implementation "androidx.navigation:navigation-compose:2.7.5"
 //    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
     implementation "com.github.bumptech.glide:compose:1.0.0-alpha.1"
     implementation 'com.google.android.material:material:1.10.0'
@@ -92,7 +92,7 @@ dependencies {
     //这个也得加才能预览
     debugImplementation "androidx.compose.ui:ui-tooling:$rootProject.compose_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.2"
-    implementation 'androidx.activity:activity-compose:1.8.0'
+    implementation 'androidx.activity:activity-compose:1.8.1'
     api "androidx.appcompat:appcompat:1.6.1"
     // ViewModel utilities for Compose
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2"
@@ -117,4 +117,6 @@ dependencies {
     api project(path: ':mylibrary')
     //计算库
     implementation 'net.objecthunter:exp4j:0.4.8'
+    implementation 'com.google.code.gson:gson:2.10.1'
+
 }

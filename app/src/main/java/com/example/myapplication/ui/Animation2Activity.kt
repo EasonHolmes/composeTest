@@ -59,18 +59,26 @@ class Animation2Activity : BaseActivity() {
                 endImageVector = Icons.Default.Clear,
                 leftOrRight = {
                     Log.e("ethan", "left111===$it")
-                })
-            ChangeFontSwitch(beginLeft = true, startContent = "℃", endContent = "℉", leftOrRight = {
-                Log.e("ethan", "left222===$it")
-            }, colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White))
+                }, width = 85.dp, height = 30.dp)
+            ChangeFontSwitch(
+                beginLeft = true,
+                startContent = "℃",
+                endContent = "℉",
+                leftOrRight = {
+                    Log.e("ethan", "left222===$it")
+                },
+                colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White),
+                width = 85.dp,
+                height = 30.dp
+            )
             Spacer(modifier = Modifier.height(15.dp))
             ChangeNormalSwitch(
                 beginLeft = true,
                 leftOrRight = {
                     Log.e("ethan", "left222===$it")
                 },
-                colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White,),
-                width = 120.dp,
+                colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White),
+                width = 100.dp,
                 height = 30.dp,
             )
 

@@ -42,6 +42,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -215,6 +217,8 @@ private fun ChangeFontSwitchImp(
     colors: StatusSwitchColors = ChangeStatusSwitchDefault.colors(),
     startContent: String,
     endContent: String,
+    startTxtStyle:TextStyle = TextStyle(fontSize = 12.sp),
+    endTxtStyle:TextStyle = TextStyle(fontSize = 12.sp),
     beginLeft: Boolean = true,
     leftOrRight: (bool: Boolean) -> Unit
 ) {
@@ -297,17 +301,17 @@ private fun ChangeFontSwitchImp(
             Modifier
                 .width(width)
                 .align(Alignment.Center)
-                .padding(start = 11.dp, end = 11.dp)
         ) {
             Text(
                 startContent,
-                fontSize = 12.sp,
+                style = startTxtStyle,
+                modifier = Modifier.weight(1f), textAlign = TextAlign.Center,
                 color = if (offsetX <= moveWidth) colors.startContentCheckColor else colors.startContentUncheckColor
             )
-            Spacer(modifier = Modifier.weight(1f))
             Text(
                 endContent,
-                fontSize = 12.sp,
+                modifier = Modifier.weight(1f), textAlign = TextAlign.Center,
+                style = endTxtStyle,
                 color = if (offsetX >= moveWidth) colors.endContentCheckColor else colors.endContentUncheckColor
             )
         }
@@ -331,8 +335,8 @@ fun ChangeNormalSwitch(
         width = width,
         height = height,
         colors = colors,
-        beginLeft = beginLeft,
-        leftOrRight = leftOrRight,
+        check = beginLeft,
+        checked = leftOrRight,
     )
 }
 
@@ -341,15 +345,15 @@ private fun ChangeNormalSwitchImp(
     width: Dp = 70.dp,
     height: Dp = 24.dp,
     colors: StatusSwitchColors = ChangeStatusSwitchDefault.colors(),
-    beginLeft: Boolean = true,
-    leftOrRight: (bool: Boolean) -> Unit
+    check: Boolean = false,
+    checked: (bool: Boolean) -> Unit
 ) {
     val alignDP = 3.dp
     val align = LocalDensity.current.run { alignDP.toPx() }
     val moveWidth =
         LocalDensity.current.run { (width).toPx() } - (align * 2) - LocalDensity.current.run { ((height / 2 - 3.dp) * 2).toPx() }
     var offsetX by remember {
-        mutableFloatStateOf(if (beginLeft) align else moveWidth)
+        mutableFloatStateOf(if (check) moveWidth else align)
     }
     var isDragg by remember {
         mutableStateOf(false)
@@ -424,7 +428,7 @@ private fun ChangeNormalSwitchImp(
     }
     LaunchedEffect(key1 = offsetX, block = {
         if (offsetX == align || offsetX == moveWidth)
-            leftOrRight(offsetX != align)
+            checked(offsetX != align)
     })
 }
 
