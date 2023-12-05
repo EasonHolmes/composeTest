@@ -1,15 +1,10 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
-import android.content.Context.AUDIO_SERVICE
 import android.content.Intent
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.media.AudioManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,13 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.test.internal.util.LogUtil
 import com.example.myapplication.ui.*
+import com.example.myapplication.ui.coordinator.CoordinatorLayoutNatigationAct
 import com.example.myapplication.ui.mytheme.ChangeColorApplicationTheme
 import com.example.myapplication.ui.mytheme.ColorTheme
 import com.example.myapplication.ui.mytheme.LightDarkTheme
@@ -38,12 +32,6 @@ import com.example.myapplication.ui.pintu.GameActivity
 import com.example.myapplication.ui.utils.TimerLifecycle
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
-import com.google.gson.Gson
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.text.SimpleDateFormat
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -59,6 +47,7 @@ enum class JumpEntity(val value: String) {
     PREVIEW_VIEWMODE("Viewmodel在Preview中使用"),
     GAME("拼图游戏"),
     ANIMATION2("animation2"),
+    COORDINATORLAYOUT("CoordinatorLayoutCompose"),
 }
 
 data class Users(var name: MutableState<String> = mutableStateOf(""))
@@ -74,7 +63,10 @@ class ComposeUIActivity : BaseActivity() {
         JumpEntity.PREVIEW_VIEWMODE,
         JumpEntity.GAME,
         JumpEntity.ANIMATION2,
-    )
+        JumpEntity.COORDINATORLAYOUT,
+    ).apply {
+        reverse()
+    }
 
     companion object {
         val ETAG = "ethan"
@@ -86,6 +78,7 @@ class ComposeUIActivity : BaseActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         Log.e("ethan", lifecycle.currentState.name)
     }
@@ -238,6 +231,8 @@ class ComposeUIActivity : BaseActivity() {
         })
     }
 
+    override fun needTopbar(): Boolean =false
+
     @Composable
     private fun ListUI() {
         val srcoll = rememberLazyListState()
@@ -302,6 +297,10 @@ class ComposeUIActivity : BaseActivity() {
 
             JumpEntity.ANIMATION2 -> {
                 startActivity(Intent(this, Animation2Activity::class.java))
+            }
+
+            JumpEntity.COORDINATORLAYOUT -> {
+                startActivity(Intent(this, CoordinatorLayoutNatigationAct::class.java))
             }
 
         }

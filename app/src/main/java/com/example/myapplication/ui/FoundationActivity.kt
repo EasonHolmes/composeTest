@@ -150,30 +150,30 @@ class FoundationActivity : BaseActivity() {
     }
 
 
-    @Composable
-    fun testEffect2(viewmodel: TestViewModel = viewModel()) {
-        var content = remember {
-            mutableStateOf("context")
-        }
-        val scop = rememberCoroutineScope()
-        Column {
-            Text(text = content.value)
-            val delay = TestDelay()
-            DisposableEffect(scop) {
-                scop.launch {
-                    delay.delayTestLaunch {
-                        content.value = it//退出时协程关闭 方法体内的ui 已销毁
-                        Log.e("ethan", "delayTest")
-                    }
-                }
-                onDispose {
-                    Log.e("ethan", "onDispose")
-                    scop.cancel()
-                    Log.e("ethan", "onDispose" + scop.isActive)
-                }
-            }
-        }
-    }
+//    @Composable
+//    fun testEffect2(viewmodel: TestViewModel = viewModel()) {
+//        var content = remember {
+//            mutableStateOf("context")
+//        }
+//        val scop = rememberCoroutineScope()
+//        Column {
+//            Text(text = content.value)
+//            val delay = TestDelay()
+//            DisposableEffect(scop) {
+//                scop.launch {
+//                    delay.delayTestLaunch {
+//                        content.value = it//退出时协程关闭 方法体内的ui 已销毁
+//                        Log.e("ethan", "delayTest")
+//                    }
+//                }
+//                onDispose {
+//                    Log.e("ethan", "onDispose")
+//                    scop.cancel()
+//                    Log.e("ethan", "onDispose" + scop.isActive)
+//                }
+//            }
+//        }
+//    }
 
     @SuppressLint("CoroutineCreationDuringComposition")
     @Composable

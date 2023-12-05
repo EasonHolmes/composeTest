@@ -1,10 +1,7 @@
 package com.example.myapplication.ui.widget
 
 import android.content.Intent
-import android.inputmethodservice.Keyboard
-import android.media.Image
 import android.os.Handler
-import android.util.DisplayMetrics
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.*
@@ -48,15 +45,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.ui.FoundationActivity
-import com.example.myapplication.ui.TestDelay
 import com.example.myapplication.ui.mytheme.LightDarkTheme
 import com.example.myapplication.ui.theme.Purple200
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 
 /**
@@ -492,9 +486,9 @@ fun AnimateAsStateDemo() {
             onClick = {
                 blue = !blue
                 scope.launch {
-                    TestDelay().delayTestLaunch(1000) {
-                        testContent = it
-                    }
+//                    TestDelay().delayTestLaunch(1000) {
+//                        testContent = it
+//                    }
                 }
             }
         ) {

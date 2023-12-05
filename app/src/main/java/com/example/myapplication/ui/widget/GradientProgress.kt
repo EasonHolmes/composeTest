@@ -32,10 +32,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-//渐变带动画progress
+//渐变带动画带边框progress
 @Composable
 fun GradientProgress(
     modifier: Modifier = Modifier,
+    progress: Float,
     progressPadding: PaddingValues = PaddingValues(),
     progressColor: Color = Color.Transparent,
     backgroundColor: Color = Color.Transparent,
@@ -45,7 +46,6 @@ fun GradientProgress(
             Color.Transparent
         )
     ),
-    progress: Float,
     roundedCornerShape: RoundedCornerShape = RoundedCornerShape(16.dp),
     tween: TweenSpec<Dp> = tween(500, delayMillis = 300, easing = LinearOutSlowInEasing),
     anim: Boolean = false
