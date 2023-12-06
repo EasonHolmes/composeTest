@@ -2,6 +2,8 @@ package com.example.myapplication.ui.widget
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,9 +17,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.Logutils
+import kotlinx.coroutines.delay
 
 
 @Composable
@@ -26,7 +31,7 @@ fun CircleProgress(
     borderColor: Color = MaterialTheme.colors.primary,
     centerColor: Color = MaterialTheme.colors.secondary,
     borderWidth: Dp = 2.dp,
-    progress: Float = 1f
+    progress: ()->Float={1f}
 ) {
     val sizePiex = LocalDensity.current.run { (diameter).toPx() }
 
@@ -37,7 +42,7 @@ fun CircleProgress(
         .size(diameter), onDraw = {
         drawRect(
             centerColor,
-            topLeft = Offset(0f, sizePiex - sizePiex * progress),
+            topLeft = Offset(0f, sizePiex - sizePiex * progress.invoke()),
             size = Size(sizePiex, sizePiex),
         )
 

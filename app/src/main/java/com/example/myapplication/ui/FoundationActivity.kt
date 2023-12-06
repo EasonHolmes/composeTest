@@ -4,7 +4,12 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -12,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +26,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myapplication.Logutils
 import com.example.myapplication.R
 import com.example.myapplication.ui.mytheme.LightDarkTheme
 import com.example.myapplication.ui.vm.ExampleUiData
@@ -29,6 +36,7 @@ import com.example.myapplication.ui.vm.TestViewModel
 import com.example.myapplication.ui.widget.GradientButton
 import com.example.myapplication.ui.widget.GradientButton2
 import com.example.myapplication.ui.widget.createCircularReveal
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -39,18 +47,6 @@ class FoundationActivity : BaseActivity() {
     private val mViewmodel: TestViewModel by lazy {
         ViewModelProvider(this)[TestViewModel::class.java]
     }
-    private val verticalGradientBrush = Brush.horizontalGradient(
-        colors = listOf(
-            Color(0xFFB9A29C),
-            Color(0xff8D6E63),
-        )
-    )
-    val dd = Brush.verticalGradient(
-        colors = listOf(
-            Color(0xFFFFC638),
-            Color(0xFFFEA41D)
-        )
-    )
     val gradient =
         Brush.horizontalGradient(listOf(Color(0xFFC6E270), Color(0xFF00BEB2)))
 
@@ -63,7 +59,12 @@ class FoundationActivity : BaseActivity() {
 
     @Composable
     override fun ContentView() {
-        TestButtons(mViewmodel.uiEvent,mViewmodel.uiViewEvent)
+        Column {
+
+            TestButtons(mViewmodel.uiEvent, mViewmodel.uiViewEvent)
+            SnackDetail()
+            Test()
+        }
     }
 
     override fun getActTtitle(): String {
@@ -76,22 +77,12 @@ class FoundationActivity : BaseActivity() {
         uiEvent: MutableStateFlow<ExampleUiData>,
         uiViewEvent: SingleLivedata<ExampleUiState>
     ) {
-        Log.e("ethan", "TestButtons===")
         val stateData2 by uiEvent.collectAsStateWithLifecycle()
-
-        Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center) {
-            Button(modifier = Modifier.align(alignment = Alignment.CenterHorizontally), onClick = {
-                TestDialog().show(this@FoundationActivity.supportFragmentManager, "dialog")
-            }) {
-                Text(text = "dialog \n mutableStateOf、 eventLivedata ChangeUI.....")//
-            }
-            // Holds state
-            GradientButton(
-                elevation = ButtonDefaults.elevation(
-                    defaultElevation = 28.dp,
-                    pressedElevation = 16.dp
-                ),
-                gradient = gradient,
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(), verticalArrangement = Arrangement.Center
+        ) {
+            Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
@@ -99,21 +90,56 @@ class FoundationActivity : BaseActivity() {
                     changeData()
                 }
             ) {
-                Text(text = "渐变button-fillMaxWidth==${stateData2.content}")
+                Text(text = "Viewmodel state使用==${stateData2.content}")
             }
-            GradientButton2(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                gradient = gradient,
-                onClick = {}
-            ) {
-                Text(text = "使用系统button增加渐变属性，渐变button - Wrap Width")
-            }
-            CircularRevealAnima()
             MaterialButton(uiViewEvent)
 
         }
+    }
+
+
+    //重组的范围：非inline且无返回值的Composable函数或lambda块
+    @Composable
+    fun SnackDetail() {
+        Logutils.e("snack====")
+        var ss by remember {
+            mutableStateOf("000000")
+        }
+
+        Column {
+            Title(tt = ss)//假设title在这里时并且参数使用的是ss的直接引用，那么就会向上寻找到SnackDetail方法打印snack====
+            //因为column是inline会向上去找非inline且无返回值的Composable函数或lambda块
+
+            //假设title在这里时并且参数使用的是ss的直接引用，只会让Title方法的内部重组
+            //因为ss是使用的lambda块而不是单纯的参数
+//                Title {
+//                    ss
+//                }
+            Button(onClick = {
+                ss = "============================="
+            }) {
+                Logutils.e("button=====")
+                //假设title在这里时并且参数使用的是ss的直接引用，那么在button的@compose范围内都会重组,
+                // 但不会引发column有以上方法重组
+                //因为button是非inline且无返回值的Composable函数
+//                Title(tt = ss)
+            }
+        }
+    }
+
+    //这种写法tt的值是与ss关联所以ss在变化时就会引起snackDetail重组打印snack====和title====
+    // 而Lambda的方式就相当于给Title传进的是Lambda而不直接是ss
+    @Composable
+    private fun Title(tt: String) {
+        Logutils.e("title====")
+        Text(text = tt)
+    }
+
+    //这种写法在是将ss变成了一个Lambda，所以他的更新重组就在Title方法中，而不是SnackDetail方法中,就只会打印Title====
+    @Composable
+    private fun Title(tt: () -> String) {
+        Logutils.e("title====")
+        Text(text = tt.invoke())
     }
 
     private fun changeData() {
@@ -126,7 +152,7 @@ class FoundationActivity : BaseActivity() {
         val stateData = uiViewEvent.observeAsState()
 
         Button(onClick = {
-//            viewmodel.changeData(33)
+            mViewmodel.changeData(33)
         }) {
             Text(
                 text = stateData.value?.exampleUiData?.content
@@ -134,125 +160,47 @@ class FoundationActivity : BaseActivity() {
             )
         }
     }
-
+    //在这里点击button后会打印test1 2 7 4 6 8 9 10 5
+    //因为block2中的text有引用state,而block2是非inline会向上打钱test1，
+    //下面block10中的text有引用state,就会向上寻找到card(非inline@compose)，所以9 10会打印，
+    //又因为block10是在block468中所以468并且也都是inline的所以也会重组打印
     @Composable
-    fun CircularRevealAnima() {
-        Column {
-//            LocalView.current.createCircularReveal()//把当前的compose转成view，也就是整个页面的
-            Image(
-                painter = painterResource(id = R.mipmap.jinzhu_icon),
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp),
-                contentDescription = "",
-            )
+    fun Test() {//block1
+        Logutils.e("Test: 1")
+        var count by remember {
+            mutableStateOf(0)
         }
-    }
+        Column {//block2
+            Logutils.e("Test: 2")
+            Button(onClick = {//block-onclick
+                Logutils.e("Test: onClick")
+                count++
+            }) {//block3
+                Logutils.e("Test: 3")
+                Text(text = "+")
+            }
 
-
-//    @Composable
-//    fun testEffect2(viewmodel: TestViewModel = viewModel()) {
-//        var content = remember {
-//            mutableStateOf("context")
-//        }
-//        val scop = rememberCoroutineScope()
-//        Column {
-//            Text(text = content.value)
-//            val delay = TestDelay()
-//            DisposableEffect(scop) {
-//                scop.launch {
-//                    delay.delayTestLaunch {
-//                        content.value = it//退出时协程关闭 方法体内的ui 已销毁
-//                        Log.e("ethan", "delayTest")
-//                    }
-//                }
-//                onDispose {
-//                    Log.e("ethan", "onDispose")
-//                    scop.cancel()
-//                    Log.e("ethan", "onDispose" + scop.isActive)
-//                }
-//            }
-//        }
-//    }
-
-    @SuppressLint("CoroutineCreationDuringComposition")
-    @Composable
-    fun testEffect() {
-        val inputText = remember { mutableStateOf("") }
-        val scope = rememberCoroutineScope()
-        Column(modifier = Modifier.padding(16.dp)) {
-//            scope.launch(Dispatchers.Main) {
-//                for (i in 0..10000) {
-//                    delay(1000)
-//                    Log.e("ethan", "i:$i")
-//                }
-//            }
-//            DisposableEffect(key1 = inputText.value) {////监听数据变化 会回调这里 退出后会关闭协程 并且有dispose 方法可以在退出页面里取消些东西
-//                Log.e("ethan", "on spose")
-//                onDispose {
-//                    Log.e("ethan", "onDispose")
-//                }
-//            }
-            LaunchedEffect(key1 = inputText.value, block = { //监听数据变化 会回调这里 退出后会关闭协程
-                Log.e("ethan", "on spose33333")
-                this.launch(Dispatchers.Main) {
-                    for (i in 0..10000) {
-                        delay(1000)
-                        Log.e("ethan", "i:$i")
+            Text(text = "$count")
+            Box {//block7
+                Logutils.e("Test: 7")
+            }
+        }
+        Box {//block4
+            Logutils.e("Test: 4")
+            Column {//block6
+                Logutils.e("Test: 6")
+                Row {//block8
+                    Logutils.e("Test: 8")
+                    Card {//block9
+                        Logutils.e("Test: 9")
+                        Box {//block10
+                            Logutils.e("Test: 10")
+                            Text(text = "$count")
+                        }
                     }
                 }
-            })
-
-            Text(
-                text = "Hello",
-                modifier = Modifier.padding(bottom = 8.dp),
-                style = MaterialTheme.typography.h5,
-            )
-            OutlinedTextField(
-                value = inputText.value,
-                onValueChange = { inputText.value = it },
-                label = { Text(text = "Name") },
-            )
-        }
-    }
-
-    @Composable
-    fun ConstraintLayoutContent() {
-        ConstraintLayout(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-        ) {
-            // Create references for the composables to constrain
-            val (button, textTitle, textContent) = createRefs()
-            Button(onClick = {
-                // Assign reference "button" to the Button composable
-            }, modifier = Modifier.constrainAs(button) {
-                top.linkTo(parent.top, margin = 16.dp)
-                bottom.linkTo(parent.bottom, margin = 16.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-            }) {
-                Text(text = "跳转到第二页")
-            }
-
-            TextButton(onClick = {
-            }, Modifier.constrainAs(textTitle) {
-                top.linkTo(button.bottom, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-            }) {
-                Text(text = "跳转到第三页")
-            }
-
-            TextButton(onClick = {
-            }, Modifier.constrainAs(textContent) {
-                top.linkTo(textTitle.bottom, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-            }) {
-                Text(text = "我该跳哪里呢？")
             }
         }
+        Logutils.e("Test: 5")
     }
 }

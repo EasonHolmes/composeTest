@@ -39,7 +39,7 @@ import com.example.myapplication.ui.vm.TestViewModel
  */
 enum class JumpEntity(val value: String) {
     ANIMATION("animation"),
-    FOUNDATION("foundation"),
+    FOUNDATION("viewmodel使用及重组范围"),
     MOTIONLAYOUT("motionLayout"),
     COLLAPSING("Collapsing视差"),
     BOTTOM_BAR("Bottombar"),
@@ -98,7 +98,6 @@ class ComposeUIActivity : BaseActivity() {
         Log.e("ethan", lifecycle.currentState.name)
     }
 
-    @SuppressLint("CoroutineCreationDuringComposition")
     @Composable
     override fun ContentView() {
         var changeColor by remember {
@@ -230,8 +229,6 @@ class ComposeUIActivity : BaseActivity() {
             viewmodel.uiViewEvent.value = ExampleUiState()
         })
     }
-
-    override fun needTopbar(): Boolean =false
 
     @Composable
     private fun ListUI() {

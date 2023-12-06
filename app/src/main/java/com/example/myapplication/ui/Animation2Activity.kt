@@ -1,6 +1,8 @@
 package com.example.myapplication.ui
 
+import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -51,6 +53,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.myapplication.Logutils
 import com.example.myapplication.R
 import com.example.myapplication.ui.widget.ChangeImageSwitch
 import com.example.myapplication.ui.widget.ChangeFontSwitch
@@ -70,6 +73,9 @@ import com.example.myapplication.ui.widget.wave.rememberWaveDrawColor
  */
 class Animation2Activity : BaseActivity() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
     @Composable
     override fun ContentView() {
         val progressAnima = remember {
@@ -114,7 +120,7 @@ class Animation2Activity : BaseActivity() {
             startImageVector = Icons.Default.Check,
             endImageVector = Icons.Default.Clear,
             leftOrRight = {
-                Log.e("ethan", "left111===$it")
+//                Log.e("ethan", "left111===$it")
             }, width = 85.dp, height = 30.dp
         )
         ChangeFontSwitch(
@@ -122,7 +128,7 @@ class Animation2Activity : BaseActivity() {
             startContent = "℃",
             endContent = "℉",
             leftOrRight = {
-                Log.e("ethan", "left222===$it")
+//                Log.e("ethan", "left222===$it")
             },
             colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White),
             width = 85.dp,
@@ -132,7 +138,7 @@ class Animation2Activity : BaseActivity() {
         ChangeNormalSwitch(
             beginLeft = true,
             leftOrRight = {
-                Log.e("ethan", "left222===$it")
+//                Log.e("ethan", "left222===$it")
             },
             colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White),
             width = 100.dp,
@@ -177,7 +183,7 @@ class Animation2Activity : BaseActivity() {
                     borderWidth = 2.dp,
                     borderColor = Color.Red,
                     centerColor = Color.Black,
-                    progress = progress
+                    progress = {progress }
                 )
                 Text(
                     text = "${(progress * 100).toInt()}%",
