@@ -41,6 +41,8 @@
         <activity android:name=".ui.coordinator.CoordinatorLayout2Activity"/>
         <activity android:name=".ui.coordinator.CoordinatorLayoutNatigationAct"/>
         <activity android:name=".ui.coordinator.CoorGenSui"/>
+        <activity android:name=".ui.coordinator.CoorGenSui"/>
+        <activity android:name=".ui.ZhuanPanActivity"/>
 
 
 

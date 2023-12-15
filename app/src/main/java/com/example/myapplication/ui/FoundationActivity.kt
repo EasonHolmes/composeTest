@@ -106,8 +106,9 @@ class FoundationActivity : BaseActivity() {
             mutableStateOf("000000")
         }
 
-        Column {
-            Title(tt = ss)//假设title在这里时并且参数使用的是ss的直接引用，那么就会向上寻找到SnackDetail方法打印snack====
+        Box {
+            Text(text = ss)
+//            Title(tt = ss)//假设title在这里时并且参数使用的是ss的直接引用，那么就会向上寻找到SnackDetail方法打印snack====
             //因为column是inline会向上去找非inline且无返回值的Composable函数或lambda块
 
             //假设title在这里时并且参数使用的是ss的直接引用，只会让Title方法的内部重组

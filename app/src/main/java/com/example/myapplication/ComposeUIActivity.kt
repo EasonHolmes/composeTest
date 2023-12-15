@@ -48,6 +48,7 @@ enum class JumpEntity(val value: String) {
     GAME("拼图游戏"),
     ANIMATION2("animation2"),
     COORDINATORLAYOUT("CoordinatorLayoutCompose"),
+    ZHUANPAN("转盘"),
 }
 
 data class Users(var name: MutableState<String> = mutableStateOf(""))
@@ -64,6 +65,7 @@ class ComposeUIActivity : BaseActivity() {
         JumpEntity.GAME,
         JumpEntity.ANIMATION2,
         JumpEntity.COORDINATORLAYOUT,
+        JumpEntity.ZHUANPAN,
     ).apply {
         reverse()
     }
@@ -298,6 +300,9 @@ class ComposeUIActivity : BaseActivity() {
 
             JumpEntity.COORDINATORLAYOUT -> {
                 startActivity(Intent(this, CoordinatorLayoutNatigationAct::class.java))
+            }
+            JumpEntity.ZHUANPAN->{
+                startActivity(Intent(this, ZhuanPanActivity::class.java))
             }
 
         }

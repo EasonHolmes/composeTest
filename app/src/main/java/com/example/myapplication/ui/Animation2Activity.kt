@@ -1,8 +1,8 @@
 package com.example.myapplication.ui
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -51,18 +52,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.myapplication.Logutils
+import androidx.compose.ui.unit.sp
 import com.example.myapplication.R
 import com.example.myapplication.ui.widget.ChangeImageSwitch
 import com.example.myapplication.ui.widget.ChangeFontSwitch
 import com.example.myapplication.ui.widget.ChangeNormalSwitch
 import com.example.myapplication.ui.widget.ChangeStatusSwitchDefault
 import com.example.myapplication.ui.widget.CircleProgress
+import com.example.myapplication.ui.widget.RowTabStyleDefault
 import com.example.myapplication.ui.widget.GradientProgress
+import com.example.myapplication.ui.widget.RowTabUI
 import com.example.myapplication.ui.widget.SwitchMaterial3Defaults
 import com.example.myapplication.ui.widget.SwitchMaterial3
+import com.example.myapplication.ui.widget.TabStyle
 import com.example.myapplication.ui.widget.wave.DrawType
 import com.example.myapplication.ui.widget.wave.WaveLoading
 import com.example.myapplication.ui.widget.wave.rememberWaveDrawColor
@@ -72,10 +79,17 @@ import com.example.myapplication.ui.widget.wave.rememberWaveDrawColor
  * Created by Ethan Cui on 2023/5/12
  */
 class Animation2Activity : BaseActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
+
+    @Preview(showSystemUi = true, uiMode = UI_MODE_NIGHT_YES)
+    @Composable
+    private fun PP() {
+        CustomSwitch()
+
+    }
+
     @Composable
     override fun ContentView() {
         val progressAnima = remember {
@@ -105,12 +119,59 @@ class Animation2Activity : BaseActivity() {
             Material3ButtonExample()
             CustomCircleProgress()
             WaveUI()
+            CustomRowTabUI()
 
         }
         LaunchedEffect(key1 = Unit, block = {
             progressAnima.animateTo(1f, tween(1000), block = {
             })
         })
+    }
+
+    @Composable
+    private fun CustomRowTabUI() {
+        var selectIndex by remember {
+            mutableIntStateOf(0)
+        }
+        RowTabUI(
+            tabPadding = PaddingValues(10.dp),
+            items = listOf("Avatar", "Emoticons", "oqijwe"),
+            rowTabStyle = RowTabStyleDefault.style(
+                roundedCornerShape = RoundedCornerShape(12.dp),
+                tabBgBursh = Brush.horizontalGradient(
+                    listOf(
+                        Color(0xFF8A67F7),
+                        Color(0xFF6785FF)
+                    )
+                ),
+                rowTabStyle = TabStyle.LINE,
+                selectTextColor = Color.Black,
+                unSelectTextColor = Color.Gray,
+                elevation = 5.dp,
+//                bgColor = Color.White
+            ),
+            animationSpec = tween(350, easing = LinearEasing),
+            onSelectIndex = {
+////                                scop.launch {
+////                                    pagerState.animateScrollToPage(it)
+////                                }
+//                selectIndex = it
+                            Log.e("ethan","--=-=-=="+it)
+            },
+            animFinish = {
+                selectIndex = it
+                Log.e("ethan","animFinish--=-=-=="+it)
+
+            }
+        ) { index,item ->
+            Text(
+                text = item,
+                color = if (selectIndex == index) Color.Black else Color.Gray,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp
+            )
+        }
     }
 
     @Composable
@@ -179,11 +240,11 @@ class Animation2Activity : BaseActivity() {
             }
             Box() {
                 CircleProgress(
-                    diameter = 100.dp,
+                    diameter = 80.dp,
                     borderWidth = 2.dp,
                     borderColor = Color.Red,
                     centerColor = Color.Black,
-                    progress = {progress }
+                    progress = { progress }
                 )
                 Text(
                     text = "${(progress * 100).toInt()}%",
@@ -212,7 +273,7 @@ class Animation2Activity : BaseActivity() {
                     progress = 0.5f, // 0f ~ 1f
                     backDrawType = rememberWaveDrawColor(color = Color.White),
                     foreDrawType = DrawType.DrawColor(Color.Red),
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier.size(80.dp)
                 ) {
                     //                    Image(
                     //                        painter = painterResource(id = R.mipmap.jinzhu_icon),
@@ -220,7 +281,7 @@ class Animation2Activity : BaseActivity() {
                     //                    )
                     Box(
                         modifier = Modifier
-                            .size(100.dp)
+                            .size(80.dp)
                             .background(Color.Red)
                     )
                 }
@@ -238,7 +299,7 @@ class Animation2Activity : BaseActivity() {
                     progress = 0.5f, // 0f ~ 1f
                     backDrawType = DrawType.DrawColor(Color.White),//未到的颜色 DrawType.None就是没有颜色
                     //                    foreDrawType = DrawType.DrawColor(Color.Red),//波纹色
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier.size(80.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.mipmap.jinzhu_icon),

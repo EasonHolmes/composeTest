@@ -2,9 +2,10 @@ package com.example.myapplication.ui.mytheme
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.myapplication.ui.theme.*
 
@@ -109,6 +110,16 @@ fun ChangeColorApplicationTheme(
         shapes = Shapes,
         content = content,
     )
+}
+//用来控制重组范围,自定义一个非inline且没有返回值的compose
+@Composable
+fun ControlReComposition(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Box(modifier = modifier){
+        content.invoke()
+    }
 }
 
 enum class ColorTheme {
