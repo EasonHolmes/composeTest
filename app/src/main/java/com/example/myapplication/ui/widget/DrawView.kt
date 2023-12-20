@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.Logutils
 import com.example.myapplication.R
 import com.example.myapplication.ui.FoundationActivity
 import com.example.myapplication.ui.mytheme.LightDarkTheme
@@ -376,10 +377,10 @@ fun LoadMoreListHandler(listState: LazyListState, buffer: Int = 1, onLoaderMore:
             val totalItemsCount = layoutInfo.totalItemsCount
             val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
             val b = lastVisibleItemIndex > (totalItemsCount - buffer)
-            Log.e(
-                "ethan",
-                "lastVisibleItemIndex:${lastVisibleItemIndex},totalItemsCount:${totalItemsCount},buffer:${buffer},result:${b}"
-            )
+//            Log.e(
+//                "ethan",
+//                "lastVisibleItemIndex:${lastVisibleItemIndex},totalItemsCount:${totalItemsCount},buffer:${buffer},result:${b}"
+//            )
             b
         }
     }
@@ -390,23 +391,11 @@ fun LoadMoreListHandler(listState: LazyListState, buffer: Int = 1, onLoaderMore:
             .distinctUntilChanged()
             .collect {
                 if (it) {
+                    Logutils.e("more")
                     onLoaderMore()
                 }
             }
     }
-//    LaunchedEffect(key1 = listState, block = {
-//        snapshotFlow{listState.firstVisibleItemIndex}
-//            .distinctUntilChanged().collect{
-//                Log.e("ethan","firstVisible===="+it)
-//            }
-//    })
-//    LaunchedEffect(key1 = listState, block = {
-//        snapshotFlow{listState.layoutInfo}
-//            .map {  (it.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1 }
-//            .distinctUntilChanged().collect{
-//                Log.e("ethan","lastVisible===="+it)
-//            }
-//    })
 }
 
 //布局切换动画
@@ -618,7 +607,8 @@ fun AnimationAsStateAndAnimateTo(context: AppCompatActivity) {
     }
 
 
-    val size2 by animateSizeAsState(if (flag) Size(40f, 40f) else Size(120f, 60f),
+    val size2 by animateSizeAsState(
+        if (flag) Size(40f, 40f) else Size(120f, 60f),
         tween(1000, easing = FastOutLinearInEasing), finishedListener = {
             // 可以设置动画结束的监听函数，回调动画结束时对应属性的目标值
             Log.e("ethan", "size animate finished with $it")

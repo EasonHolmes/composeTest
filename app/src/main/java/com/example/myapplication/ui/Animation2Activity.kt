@@ -7,6 +7,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateSizeAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
@@ -24,11 +25,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -42,6 +43,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,7 +54,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,6 +71,7 @@ import com.example.myapplication.ui.widget.RowTabUI
 import com.example.myapplication.ui.widget.SwitchMaterial3Defaults
 import com.example.myapplication.ui.widget.SwitchMaterial3
 import com.example.myapplication.ui.widget.TabStyle
+import com.example.myapplication.ui.widget.UploadProgressButton
 import com.example.myapplication.ui.widget.wave.DrawType
 import com.example.myapplication.ui.widget.wave.WaveLoading
 import com.example.myapplication.ui.widget.wave.rememberWaveDrawColor
@@ -120,12 +122,31 @@ class Animation2Activity : BaseActivity() {
             CustomCircleProgress()
             WaveUI()
             CustomRowTabUI()
+            UploadBtn()
 
         }
         LaunchedEffect(key1 = Unit, block = {
             progressAnima.animateTo(1f, tween(1000), block = {
             })
         })
+    }
+
+    @Composable
+    private fun UploadBtn() {
+        var click by remember {
+            mutableStateOf(false)
+        }
+        UploadProgressButton(
+            width = 120.dp,
+            height = 40.dp,
+            realProgress = animateFloatAsState(
+                targetValue = if (click) 1f else 0f,
+                tween(2500), label = ""
+            ).value,
+            borderStroke = 5.dp,
+            progressColor = Color.Red,
+            buttonColor = MaterialTheme.colors.primary
+        ) { click = !click }
     }
 
     @Composable
@@ -156,14 +177,14 @@ class Animation2Activity : BaseActivity() {
 ////                                    pagerState.animateScrollToPage(it)
 ////                                }
 //                selectIndex = it
-                            Log.e("ethan","--=-=-=="+it)
+                Log.e("ethan", "--=-=-==" + it)
             },
             animFinish = {
                 selectIndex = it
-                Log.e("ethan","animFinish--=-=-=="+it)
+                Log.e("ethan", "animFinish--=-=-==" + it)
 
             }
-        ) { index,item ->
+        ) { index, item ->
             Text(
                 text = item,
                 color = if (selectIndex == index) Color.Black else Color.Gray,
