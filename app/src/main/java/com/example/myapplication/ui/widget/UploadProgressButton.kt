@@ -21,6 +21,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -41,8 +42,9 @@ fun UploadProgressButton(
     width: Dp,
     height: Dp,
     borderStroke: Dp,
-    progressColor:Color,
-    buttonColor:Color,
+    progressColor: Color,
+    buttonColor: Color,
+    buttonShape :Dp = 16.dp,
     realProgress: Float,
     onclick: () -> Unit
 ) {
@@ -62,53 +64,33 @@ fun UploadProgressButton(
             ""
         }
     }
+    val isDoneReady  = realProgress == 0f || realProgress == 1f
     val progressAlpha by animateFloatAsState(
-        targetValue = if (realProgress == 0f || realProgress == 1f) 0f else 1f,
-        tween(500, 250, easing = LinearEasing), label = ""
+        targetValue = if (isDoneReady) 0f else 1f,
+        tween(500, 500, easing = LinearEasing), label = ""
     )
-
     Box(modifier = Modifier.size(width, height), contentAlignment = Alignment.Center) {
         Button(
             onClick = onclick, modifier = Modifier
-                .alpha(
-                    animateFloatAsState(
-                        targetValue = if (realProgress == 0f || realProgress == 1f) 1f else 0f,
-                        tween(800, easing = LinearEasing), label = ""
-                    ).value
-                )
+                .clip(RoundedCornerShape(if (isDoneReady) buttonShape else 360.dp))
                 .size(
                     width = animateDpAsState(
-                        targetValue = if (realProgress == 0f || realProgress == 1f) width else height - borderStroke,
+                        targetValue = if (isDoneReady) width else height - borderStroke,
                         tween(500, easing = LinearEasing), label = "",
-                    ).value, height = height
-                ),colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor)
+                    ).value, height = animateDpAsState(
+                        targetValue = if (isDoneReady) height else height - borderStroke,
+                        tween(500, easing = LinearEasing), label = "",
+                    ).value
+                ), colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor)
         ) {
             Text(text = text)
         }
-        // 进度
-        Box(
-            modifier = Modifier
-                .size(height)
-                .clip(ArcShape((realProgress * 100).toInt(), listener = {
-                }))
-                .alpha(
-                    progressAlpha
-                )
-                .background(buttonColor)
-        )
-        // 白色蒙版
-        Box(
-            modifier = Modifier
-                .size(height - borderStroke)
-                .clip(RoundedCornerShape(360.dp))
-                .alpha(
-                    animateFloatAsState(
-                        targetValue = if (realProgress == 0f || realProgress == 1f) 0f else 1f,
-                        tween(500, easing = LinearEasing), label = ""
-                    ).value
-                )
-                .background(progressColor)
-        )
-
+        if (realProgress < 1f) {
+            CircularProgressIndicator(
+                progress = realProgress, modifier = Modifier
+                    .size(height)
+                    .alpha(progressAlpha), color = progressColor
+            )
+        }
     }
 }

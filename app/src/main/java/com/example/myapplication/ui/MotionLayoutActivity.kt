@@ -283,7 +283,7 @@ class MotionLayoutActivity : BaseActivity() {
             }
             CustomSeekbar(modifier = Modifier.layoutId("progress"), onProgressChanged = {
                 progressValue = it
-            })
+            },indicatorColor = Color.Red,backgroundIndicatorColor = Color.Green)
             //使用
             var progress by remember { mutableStateOf(50f) }
             CustomProgressBar(
@@ -292,6 +292,7 @@ class MotionLayoutActivity : BaseActivity() {
                 onProgressChanged = { newProgress ->
                     progress = newProgress
                 },
+                progressColor = Color.Red
             )
         }
 

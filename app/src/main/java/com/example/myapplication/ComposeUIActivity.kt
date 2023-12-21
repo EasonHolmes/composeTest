@@ -32,6 +32,8 @@ import com.example.myapplication.ui.pintu.GameActivity
 import com.example.myapplication.ui.utils.TimerLifecycle
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
+import java.text.SimpleDateFormat
+import java.util.concurrent.TimeUnit
 
 
 /**
@@ -78,13 +80,11 @@ class ComposeUIActivity : BaseActivity() {
     private val mViewmodel by lazy {
         ViewModelProvider(this)[TestViewModel::class.java]
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         Log.e("ethan", lifecycle.currentState.name)
     }
-
     override fun onRestart() {
         super.onRestart()
         Log.e("ethan", lifecycle.currentState.name)
