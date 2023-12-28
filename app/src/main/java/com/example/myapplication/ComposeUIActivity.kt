@@ -33,6 +33,7 @@ import com.example.myapplication.ui.utils.TimerLifecycle
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.concurrent.TimeUnit
 
 
@@ -84,6 +85,7 @@ class ComposeUIActivity : BaseActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         Log.e("ethan", lifecycle.currentState.name)
+
     }
     override fun onRestart() {
         super.onRestart()

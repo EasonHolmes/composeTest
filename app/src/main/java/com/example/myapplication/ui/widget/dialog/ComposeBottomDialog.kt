@@ -50,7 +50,7 @@ abstract class ComposeBottomDialog<VM : ViewModel> : BottomSheetDialogFragment()
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return CustomBottomDialog(requireContext())
     }
-
+    var isHideable = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dialog = dialog as CustomBottomDialog
@@ -58,10 +58,14 @@ abstract class ComposeBottomDialog<VM : ViewModel> : BottomSheetDialogFragment()
         dialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
 //        dialog.setMaxHeight(1600)
 //        dialog.setNonBackground()
-        dialog.behavior.isHideable = false//禁止向下拖动
-        dialog.window!!.setDimAmount(0.4f)
+        dialog.behavior.isHideable = isHideable//false禁止向下拖动
+        dialog.window?.setDimAmount(0.4f)
 
     }
+    fun setIshideable(bool:Boolean){
+        this.isHideable = bool
+    }
+
 
     private fun roundBackground(rootView: View) {
         rootView.viewTreeObserver.addOnGlobalLayoutListener(object :

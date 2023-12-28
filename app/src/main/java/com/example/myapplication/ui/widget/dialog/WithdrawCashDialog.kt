@@ -3,6 +3,7 @@ package com.example.myapplication.ui.widget.dialog
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,6 +41,26 @@ class WithdrawCashDialog : ComposeBottomDialog<ViewModel>() {
     @Composable
     override fun ContentView(preview: Boolean) {
         ContentUI(preview)
+        Column {
+            Text(text = "etst")
+            Text(text = "etst")
+            Text(text = "etst")
+            Text(text = "etst")
+            Button(onClick = {
+                click.invoke()
+            }) {
+                Text(text = "close")
+            }
+            Text(text = "etst")
+            Text(text = "etst")
+            Text(text = "etst")
+            Text(text = "etst")
+        }
+    }
+
+    private var click: () -> Unit = {}
+    public fun setOnclickListener(click: () -> Unit) {
+        this.click = click
     }
 
     @Composable

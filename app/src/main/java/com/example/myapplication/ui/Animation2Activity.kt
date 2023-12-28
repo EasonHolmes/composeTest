@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -72,9 +73,15 @@ import com.example.myapplication.ui.widget.SwitchMaterial3Defaults
 import com.example.myapplication.ui.widget.SwitchMaterial3
 import com.example.myapplication.ui.widget.TabStyle
 import com.example.myapplication.ui.widget.UploadProgressButton
+import com.example.myapplication.ui.widget.dialog.WithdrawCashDialog
 import com.example.myapplication.ui.widget.wave.DrawType
 import com.example.myapplication.ui.widget.wave.WaveLoading
 import com.example.myapplication.ui.widget.wave.rememberWaveDrawColor
+import com.skydoves.flexible.bottomsheet.material.FlexibleBottomSheet
+import com.skydoves.flexible.core.FlexibleSheetSize
+import com.skydoves.flexible.core.FlexibleSheetValue
+import com.skydoves.flexible.core.rememberFlexibleBottomSheetState
+import kotlinx.coroutines.launch
 
 
 /**
@@ -92,6 +99,8 @@ class Animation2Activity : BaseActivity() {
 
     }
 
+    private val bottomSheetShow = mutableStateOf(true)
+
     @Composable
     override fun ContentView() {
         val progressAnima = remember {
@@ -104,7 +113,7 @@ class Animation2Activity : BaseActivity() {
                 .verticalScroll(rememberScrollState())
         ) {
             ScrollText()
-            FounctionMaterial3()
+            Material3Switch()
             CustomSwitch()
             Spacer(modifier = Modifier.height(15.dp))
             GradientProgress(
@@ -119,10 +128,32 @@ class Animation2Activity : BaseActivity() {
                     .height(16.dp), anim = false
             )
             Material3ButtonExample()
-            CustomCircleProgress()
-            WaveUI()
+            Row {
+                var progress by remember {
+                    mutableFloatStateOf(.5f)
+                }
+                CustomCircleProgress(Modifier.weight(1f)) {
+                    progress = it
+                }
+                WaveUI(progress)
+            }
             CustomRowTabUI()
             UploadBtn()
+            Button(onClick = {
+                WithdrawCashDialog().apply {
+                    setIshideable(true)
+                    this.setOnclickListener {
+                        this.dismiss()
+                    }
+                    show(supportFragmentManager, "")
+                }
+
+            }) {
+                Text(text = "bottomsheetDialog")
+            }
+            if (bottomSheetShow.value) {
+                BottomSheet { bottomSheetShow.value = false }
+            }
 
         }
         LaunchedEffect(key1 = Unit, block = {
@@ -195,37 +226,87 @@ class Animation2Activity : BaseActivity() {
         }
     }
 
+    //https://github.com/skydoves/FlexibleBottomSheet?tab=readme-ov-file
+    @Composable
+    private fun BottomSheet(onDismissRequest: () -> Unit) {
+        val scope = rememberCoroutineScope()
+        //默认最小展开设置
+        val sheetState = rememberFlexibleBottomSheetState(
+            flexibleSheetSize = FlexibleSheetSize(),
+            isModal = true,//false弹框下面的界面也可以交互，同时也就没有遮罩
+            skipSlightlyExpanded = false,
+            skipIntermediatelyExpanded = true,
+        )
+
+        FlexibleBottomSheet(
+            sheetState = sheetState,
+            containerColor = Color.Black,
+            onDismissRequest = onDismissRequest,
+        ) {
+            Button(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = {
+                    scope.launch {
+                        if (sheetState.swipeableState.currentValue == FlexibleSheetValue.SlightlyExpanded) {
+                            sheetState.fullyExpand()
+//                            FlexibleSheetValue.IntermediatelyExpanded -> sheetState.fullyExpand()
+                        } else {
+                            sheetState.slightlyExpand()
+                        }
+                    }
+                },
+            ) {
+                Text(text = "Expand type")
+            }
+            Button(onClick = {
+                scope.launch {
+                    sheetState.hide()
+                }.invokeOnCompletion {
+                    if (!sheetState.isVisible) {
+                        onDismissRequest.invoke()
+                    }
+                }
+            }) {
+                Text(text = "close")
+            }
+        }
+    }
+
     @Composable
     private fun CustomSwitch() {
-        ChangeImageSwitch(
-            beginLeft = true,
-            startImageVector = Icons.Default.Check,
-            endImageVector = Icons.Default.Clear,
-            leftOrRight = {
+        Row {
+
+            ChangeImageSwitch(
+                beginLeft = true,
+                startImageVector = Icons.Default.Check,
+                endImageVector = Icons.Default.Clear,
+                leftOrRight = {
 //                Log.e("ethan", "left111===$it")
-            }, width = 85.dp, height = 30.dp
-        )
-        ChangeFontSwitch(
-            beginLeft = true,
-            startContent = "℃",
-            endContent = "℉",
-            leftOrRight = {
+                }, width = 85.dp, height = 30.dp
+            )
+            ChangeFontSwitch(
+                beginLeft = true,
+                startContent = "℃",
+                endContent = "℉",
+                leftOrRight = {
 //                Log.e("ethan", "left222===$it")
-            },
-            colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White),
-            width = 85.dp,
-            height = 30.dp
-        )
-        Spacer(modifier = Modifier.height(15.dp))
-        ChangeNormalSwitch(
-            beginLeft = true,
-            leftOrRight = {
+                },
+                colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White),
+                width = 85.dp,
+                height = 30.dp
+            )
+            Spacer(modifier = Modifier.height(15.dp))
+            ChangeNormalSwitch(
+                beginLeft = true,
+                leftOrRight = {
 //                Log.e("ethan", "left222===$it")
-            },
-            colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White),
-            width = 100.dp,
-            height = 30.dp,
-        )
+                },
+                colors = ChangeStatusSwitchDefault.colors(startThumbColor = Color.White),
+                width = 100.dp,
+                height = 30.dp,
+            )
+        }
+
     }
 
     @Composable
@@ -254,8 +335,8 @@ class Animation2Activity : BaseActivity() {
     }
 
     @Composable
-    private fun CustomCircleProgress() {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+    private fun CustomCircleProgress(modifier: Modifier, progress: (Float) -> Unit) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
             var progress by remember {
                 mutableFloatStateOf(0f)
             }
@@ -277,12 +358,13 @@ class Animation2Activity : BaseActivity() {
             }
             Slider(value = progress, valueRange = 0f..1f, onValueChange = {
                 progress = it
-            })
+                progress(progress)
+            }, modifier = Modifier.weight(1f))
         }
     }
 
     @Composable
-    private fun WaveUI() {
+    private fun WaveUI(progress: Float) {
         Row {
             //纯水波纹可以这么设置
             Box(
@@ -291,7 +373,7 @@ class Animation2Activity : BaseActivity() {
                     .border(2.dp, Color.Green, RoundedCornerShape(360.dp))
             ) {
                 WaveLoading(
-                    progress = 0.5f, // 0f ~ 1f
+                    progress = progress, // 0f ~ 1f
                     backDrawType = rememberWaveDrawColor(color = Color.White),
                     foreDrawType = DrawType.DrawColor(Color.Red),
                     modifier = Modifier.size(80.dp)
@@ -317,7 +399,7 @@ class Animation2Activity : BaseActivity() {
                 Modifier
             ) {
                 WaveLoading(
-                    progress = 0.5f, // 0f ~ 1f
+                    progress = progress, // 0f ~ 1f
                     backDrawType = DrawType.DrawColor(Color.White),//未到的颜色 DrawType.None就是没有颜色
                     //                    foreDrawType = DrawType.DrawColor(Color.Red),//波纹色
                     modifier = Modifier.size(80.dp)
@@ -364,7 +446,7 @@ class Animation2Activity : BaseActivity() {
     }
 
     @Composable
-    private fun FounctionMaterial3() {
+    private fun Material3Switch() {
         var checked by remember {
             mutableStateOf(false)
         }
