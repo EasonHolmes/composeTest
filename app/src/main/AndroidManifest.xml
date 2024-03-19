@@ -36,7 +36,7 @@
         <activity android:name=".ui.BottomBar_PagerActivity"/>
         <activity android:name=".ui.NavigationActivity"/>
         <activity android:name=".ui.PreviewByViewmodelActivity"/>
-        <activity android:name=".ui.pintu.GameActivity"/>
+        <activity android:name=".ui.pintu.PintuActivity"/>
         <activity android:name=".ui.Animation2Activity"/>
         <activity android:name=".ui.coordinator.CoordinatorLayoutActivity"/>
         <activity android:name=".ui.coordinator.CoordinatorLayout2Activity"/>
@@ -44,6 +44,8 @@
         <activity android:name=".ui.coordinator.CoorGenSui"/>
         <activity android:name=".ui.ZhuanPanActivity"/>
         <activity android:name=".ui.Game2048Activity"/>
+        <activity android:name=".ui.WhackMoleActivity"/>
+        <activity android:name=".ui.GamesActivity"/>
 
 
 

@@ -12,7 +12,7 @@ import com.example.myapplication.ui.widget.PinTuWidget
 /**
  * Created by Ethan Cui on 2023/4/27
  */
-class GameActivity : AppCompatActivity() {
+class PintuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

@@ -29,7 +29,6 @@ import com.example.myapplication.ui.coordinator.CoordinatorLayoutNatigationAct
 import com.example.myapplication.ui.mytheme.ChangeColorApplicationTheme
 import com.example.myapplication.ui.mytheme.ColorTheme
 import com.example.myapplication.ui.mytheme.LightDarkTheme
-import com.example.myapplication.ui.pintu.GameActivity
 import com.example.myapplication.ui.utils.TimerLifecycle
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
@@ -46,11 +45,10 @@ enum class JumpEntity(val value: String) {
     BOTTOM_BAR("Bottombar"),
     NAVIGATION("Navigation"),
     PREVIEW_VIEWMODE("Viewmodel在Preview中使用"),
-    GAME("拼图游戏xml和compose"),
     ANIMATION2("animation2"),
     COORDINATORLAYOUT("CoordinatorLayoutCompose"),
     ZHUANPAN("转盘"),
-    Game2048("2048"),
+    GAMES("游戏类")
 }
 
 data class Users(var name: MutableState<String> = mutableStateOf(""))
@@ -64,11 +62,10 @@ class ComposeUIActivity : BaseActivity() {
         JumpEntity.BOTTOM_BAR,
         JumpEntity.NAVIGATION,
         JumpEntity.PREVIEW_VIEWMODE,
-        JumpEntity.GAME,
         JumpEntity.ANIMATION2,
         JumpEntity.COORDINATORLAYOUT,
         JumpEntity.ZHUANPAN,
-        JumpEntity.Game2048,
+        JumpEntity.GAMES,
     ).apply {
         reverse()
     }
@@ -310,8 +307,8 @@ class ComposeUIActivity : BaseActivity() {
                 startActivity(Intent(this, PreviewByViewmodelActivity::class.java))
             }
 
-            JumpEntity.GAME -> {
-                startActivity(Intent(this, GameActivity::class.java))
+            JumpEntity.GAMES -> {
+                startActivity(Intent(this, GamesActivity::class.java))
             }
 
             JumpEntity.ANIMATION2 -> {
@@ -324,10 +321,6 @@ class ComposeUIActivity : BaseActivity() {
 
             JumpEntity.ZHUANPAN -> {
                 startActivity(Intent(this, ZhuanPanActivity::class.java))
-            }
-
-            JumpEntity.Game2048 -> {
-                startActivity(Intent(this, Game2048Activity::class.java))
             }
 
         }

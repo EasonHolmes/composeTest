@@ -107,39 +107,6 @@ fun PinTuWidget(imgResources: Int, columns: Int) {
                 })
         }
     )
-//    var list = (0..20).toList().sortedDescending().toMutableStateList()
-//
-//    Column(modifier = Modifier.fillMaxSize()) {
-//        Row {
-//            Button(onClick = {
-////                val first = list.first()
-////                list.add(0, first + 1)
-//                swapItems(list,2,5)
-//            }) {
-//                Text(text = "添加")
-//            }
-//
-//            Button(onClick = {
-//                val random = list.random()
-//                list.remove(random)
-//            }, modifier = Modifier.padding(start = 10.dp)) {
-//                Text(text = "移除")
-//            }
-//        }
-//
-//        LazyColumn(
-//            verticalArrangement = Arrangement.spacedBy(10.dp)
-//        ) {
-//            items(list.count(), key = { index: Int -> list[index].toString() }) { index ->
-//
-//                Text(
-//                    text = "列表项目${list[index]}",
-//                    modifier = Modifier.animateItemPlacement()
-//                )
-//            }
-//        }
-//    }
-
 
 }
 
