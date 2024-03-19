@@ -117,9 +117,12 @@ dependencies {
 
 //    api project(path: ':icon_library')
     api project(path: ':mylibrary')
+    api project(path: ':NetLibrary')
     //计算库
     implementation 'net.objecthunter:exp4j:0.4.8'
     implementation 'com.google.code.gson:gson:2.10.1'
     //bottomsheet
     implementation("com.github.skydoves:flexible-bottomsheet-material:0.1.1")
+    implementation 'com.tencent:mmkv:1.2.11'
+
 }

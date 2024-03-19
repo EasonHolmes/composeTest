@@ -14,6 +14,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -49,25 +50,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.Logutils
 import com.example.myapplication.R
 import com.example.myapplication.ui.widget.ChangeImageSwitch
 import com.example.myapplication.ui.widget.ChangeFontSwitch
 import com.example.myapplication.ui.widget.ChangeNormalSwitch
 import com.example.myapplication.ui.widget.ChangeStatusSwitchDefault
+import com.example.myapplication.ui.widget.CheckBoxGroup
 import com.example.myapplication.ui.widget.CircleProgress
 import com.example.myapplication.ui.widget.RowTabStyleDefault
 import com.example.myapplication.ui.widget.GradientProgress
+import com.example.myapplication.ui.widget.PinTuWidget
 import com.example.myapplication.ui.widget.RowTabUI
 import com.example.myapplication.ui.widget.SwitchMaterial3Defaults
 import com.example.myapplication.ui.widget.SwitchMaterial3
@@ -82,6 +90,7 @@ import com.skydoves.flexible.core.FlexibleSheetSize
 import com.skydoves.flexible.core.FlexibleSheetValue
 import com.skydoves.flexible.core.rememberFlexibleBottomSheetState
 import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 
 /**
@@ -99,7 +108,15 @@ class Animation2Activity : BaseActivity() {
 
     }
 
-    private val bottomSheetShow = mutableStateOf(true)
+    private val bottomSheetShow = mutableStateOf(false)
+    private val bottomDialog by lazy {
+        WithdrawCashDialog().apply {
+            setIshideable(true)
+            this.setOnclickListener {
+                this.dismiss()
+            }
+        }
+    }
 
     @Composable
     override fun ContentView() {
@@ -140,21 +157,30 @@ class Animation2Activity : BaseActivity() {
             CustomRowTabUI()
             UploadBtn()
             Button(onClick = {
-                WithdrawCashDialog().apply {
-                    setIshideable(true)
-                    this.setOnclickListener {
-                        this.dismiss()
-                    }
-                    show(supportFragmentManager, "")
-                }
-
+                bottomDialog.show(supportFragmentManager, "")
             }) {
                 Text(text = "bottomsheetDialog")
+            }
+            Button(onClick = {
+                bottomSheetShow.value = true
+            }) {
+                Text(text = "FlexibleBottomSheet")
             }
             if (bottomSheetShow.value) {
                 BottomSheet { bottomSheetShow.value = false }
             }
-
+            Row {//使用row就是横向排列column就纵向排列
+                CheckBoxGroup(
+                    checkedKey = "nnn",
+                    strs = mutableListOf("nnn", "mmm", "ssss"),
+                    textStyle = TextStyle(),
+                    checkedColor = Color.Blue,
+                    onChanged = { key ->
+                        Logutils.e("currentCheck==$key")
+                    }
+                )
+            }
+            DragView()
         }
         LaunchedEffect(key1 = Unit, block = {
             progressAnima.animateTo(1f, tween(1000), block = {
@@ -189,14 +215,14 @@ class Animation2Activity : BaseActivity() {
             tabPadding = PaddingValues(10.dp),
             items = listOf("Avatar", "Emoticons", "oqijwe"),
             rowTabStyle = RowTabStyleDefault.style(
-                roundedCornerShape = RoundedCornerShape(12.dp),
+                roundedCornerShape = RoundedCornerShape(360.dp),
                 tabBgBursh = Brush.horizontalGradient(
                     listOf(
                         Color(0xFF8A67F7),
                         Color(0xFF6785FF)
                     )
                 ),
-                rowTabStyle = TabStyle.LINE,
+                rowTabStyle = TabStyle.ROUND,
                 selectTextColor = Color.Black,
                 unSelectTextColor = Color.Gray,
                 elevation = 5.dp,
@@ -214,7 +240,7 @@ class Animation2Activity : BaseActivity() {
                 selectIndex = it
                 Log.e("ethan", "animFinish--=-=-==" + it)
 
-            }
+            },
         ) { index, item ->
             Text(
                 text = item,
@@ -465,6 +491,39 @@ class Animation2Activity : BaseActivity() {
 //                checkedThumbColor = Color.White,
             )
         )
+    }
+
+
+    @Composable
+    fun DragView() {
+        var moveOffset by remember {
+            mutableStateOf(IntOffset(0, 0))
+        }
+        var lastX by remember {
+            mutableIntStateOf(0)
+        }
+        var lastY by remember {
+            mutableIntStateOf(0)
+        }
+        Box(modifier = Modifier
+            .offset {
+                moveOffset
+            }
+            .size(50.dp, 50.dp)
+            .background(Color.Red)
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDrag = { change, dragAmount ->
+                        change.consume()
+                        lastX += dragAmount.x.toInt()
+                        lastY += dragAmount.y.toInt()
+                        moveOffset = IntOffset(lastX, lastY)
+                    },
+                )
+
+            }){
+            Text(text = "拖拽方块",modifier = Modifier.align(alignment = Alignment.Center))
+        }
     }
 
 }

@@ -19,3 +19,4 @@ rootProject.name = "ComposeTest"
 include ':app'
 //include ':icon_library'
 include ':mylibrary'
+include ':NetLibrary'

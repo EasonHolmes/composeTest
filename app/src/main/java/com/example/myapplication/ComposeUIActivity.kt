@@ -1,9 +1,10 @@
 package com.example.myapplication
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -32,9 +33,6 @@ import com.example.myapplication.ui.pintu.GameActivity
 import com.example.myapplication.ui.utils.TimerLifecycle
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.concurrent.TimeUnit
 
 
 /**
@@ -48,10 +46,11 @@ enum class JumpEntity(val value: String) {
     BOTTOM_BAR("Bottombar"),
     NAVIGATION("Navigation"),
     PREVIEW_VIEWMODE("Viewmodel在Preview中使用"),
-    GAME("拼图游戏"),
+    GAME("拼图游戏xml和compose"),
     ANIMATION2("animation2"),
     COORDINATORLAYOUT("CoordinatorLayoutCompose"),
     ZHUANPAN("转盘"),
+    Game2048("2048"),
 }
 
 data class Users(var name: MutableState<String> = mutableStateOf(""))
@@ -69,6 +68,7 @@ class ComposeUIActivity : BaseActivity() {
         JumpEntity.ANIMATION2,
         JumpEntity.COORDINATORLAYOUT,
         JumpEntity.ZHUANPAN,
+        JumpEntity.Game2048,
     ).apply {
         reverse()
     }
@@ -81,12 +81,30 @@ class ComposeUIActivity : BaseActivity() {
     private val mViewmodel by lazy {
         ViewModelProvider(this)[TestViewModel::class.java]
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         Log.e("ethan", lifecycle.currentState.name)
 
+//        lifecycleScope.launch {
+//            val result2 = flowOf(1,2,3,4)
+//                .scan(0) {last,next->
+//                    last+next
+//                }.map {  }.flowOn(Dispatchers.IO).onCompletion {  }
+//                    .collect{
+//
+//                }
+//            okhttpFlowRequest("", KeyModel.create())
+//        }
+//      var aaaa =   getAndroidId(this)
+//        Logutils.e("aaaa===="+aaaa)
     }
+
+    fun getAndroidId(context: Context): String {
+        return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)
+    }
+
     override fun onRestart() {
         super.onRestart()
         Log.e("ethan", lifecycle.currentState.name)
@@ -303,8 +321,13 @@ class ComposeUIActivity : BaseActivity() {
             JumpEntity.COORDINATORLAYOUT -> {
                 startActivity(Intent(this, CoordinatorLayoutNatigationAct::class.java))
             }
-            JumpEntity.ZHUANPAN->{
+
+            JumpEntity.ZHUANPAN -> {
                 startActivity(Intent(this, ZhuanPanActivity::class.java))
+            }
+
+            JumpEntity.Game2048 -> {
+                startActivity(Intent(this, Game2048Activity::class.java))
             }
 
         }

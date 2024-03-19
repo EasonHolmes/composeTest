@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import com.at.ic.Ihelper
 import com.ethan.mylibrary.Empty2Activity
 import com.ethan.mylibrary.EmptyActivity
+import com.tencent.mmkv.MMKV
 
 
 /**
@@ -28,6 +29,7 @@ class MainApplication: Application() {
 //            )
 //        )
 //    Ihelper.helper1(this,Empty2Activity::class.java.name,EmptyActivity::class.java.name)
+        MMKV.initialize(this)
     }
 
 
