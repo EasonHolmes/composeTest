@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ethan.netlibrary.okcore.GsonSingle
 import com.google.gson.reflect.TypeToken
-import com.inland.clibrary.net.okcore.HttpData
-import kotlinx.coroutines.*
+import com.ethan.netlibrary.okcore.HttpData
 import okhttp3.ResponseBody
 import java.nio.charset.Charset
 

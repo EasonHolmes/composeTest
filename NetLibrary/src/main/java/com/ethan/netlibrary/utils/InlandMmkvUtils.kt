@@ -11,40 +11,36 @@ class InlandMmkvUtils private constructor(private val mmkv: MMKV?) {
     }
 
     fun getInt(key: String, defaultValue: Int = 0): Int {
-        val value = mmkv?.decodeInt(key, defaultValue)
-        value?.let {
-            return value
+        mmkv?.decodeInt(key, defaultValue)?.let {
+            return it
         }
         return defaultValue
     }
 
     fun getLong(key: String, defaultValue: Long = 0L): Long {
-        val value = mmkv?.decodeLong(key, defaultValue)
-        value?.let {
-            return value
+        mmkv?.decodeLong(key, defaultValue)?.let {
+            return it
         }
         return defaultValue
     }
 
     fun getFloat(key: String, defaultValue: Float = 0f): Float {
-        val value = mmkv?.decodeFloat(key, defaultValue)
-        value?.let {
-            return value
+        mmkv?.decodeFloat(key, defaultValue)?.let {
+            return it
         }
         return defaultValue
     }
+
     fun getDouble(key: String, defaultValue: Double = 0.0): Double {
-        val value = mmkv?.decodeDouble(key, defaultValue)
-        value?.let {
-            return value
+        mmkv?.decodeDouble(key, defaultValue)?.let {
+            return it
         }
         return defaultValue
     }
 
     fun getBoolean(key: String, defaultValue: Boolean = false): Boolean {
-        val value = mmkv?.decodeBool(key, defaultValue)
-        value?.let {
-            return value
+        mmkv?.decodeBool(key, defaultValue)?.let {
+            return it
         }
         return defaultValue
     }
@@ -66,8 +62,8 @@ class InlandMmkvUtils private constructor(private val mmkv: MMKV?) {
         mmkv?.encode(key, value)
     }
 
-    fun putDouble(key:String,value:Double){
-        mmkv?.encode(key,value)
+    fun putDouble(key: String, value: Double) {
+        mmkv?.encode(key, value)
     }
 
     fun putBoolean(key: String, value: Boolean) {

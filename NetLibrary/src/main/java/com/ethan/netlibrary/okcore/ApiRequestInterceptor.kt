@@ -1,7 +1,6 @@
 package com.ethan.netlibrary.okcore
 
 import android.app.Application
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.ethan.netlibrary.core.cache.NetCode
 import com.ethan.netlibrary.core.cache.getCacheAndroidId
 import com.ethan.netlibrary.core.cache.getCoreKey
@@ -14,10 +13,8 @@ import com.ethan.netlibrary.utils.MD5Util
 import com.ethan.netlibrary.utils.decodeAESCompress
 import com.ethan.netlibrary.utils.getCacheToken
 import com.ethan.netlibrary.utils.saveCacheToken
-import com.inland.clibrary.net.okcore.HttpData
 import com.inland.clibrary.net.okcore.OkHttpClientSingle
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.NonCancellable.cancel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
@@ -147,7 +144,7 @@ private fun decodeResponseData(
 }
 
 
-private fun makeRequest(
+ private fun makeRequest(
     actionName: String,
     requestId: String,
     keyModel: KeyModel?

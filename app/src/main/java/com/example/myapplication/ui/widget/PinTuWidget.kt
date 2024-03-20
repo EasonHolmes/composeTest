@@ -47,7 +47,8 @@ fun PinTuWidget(imgResources: Int, columns: Int) {
         ImageSplitter.split(mBitmap, columns).forEachIndexed { index, item ->
             list.add(ItemImage(index, item))
         }
-        list.sortWith { lhs, rhs -> if (Math.random() > 0.5) 1 else -1 }
+//        list.sortWith { lhs, rhs -> if (Math.random() > 0.5) 1 else -1 }
+        list.shuffle()
         list
     }
     var lastClickIndex by remember {

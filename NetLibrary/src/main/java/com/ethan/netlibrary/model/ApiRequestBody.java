@@ -1,5 +1,6 @@
 package com.ethan.netlibrary.model;
 
+import com.ethan.netlibrary.okcore.GsonSingle;
 import com.ethan.netlibrary.utils.EncryptUtils;
 import com.ethan.netlibrary.utils.MD5Util;
 import com.google.gson.Gson;
@@ -64,7 +65,7 @@ public class ApiRequestBody {
 
             data = Objects.requireNonNull(EncryptUtils.encodeAESCompress(
                     MD5Util.md5Hex(String.format("%s-%s-%s", action, requestId, packageName)),
-                    new Gson().toJson(data))).trim();
+                    GsonSingle.getInstance().toJson(data))).trim();
 
             return ApiRequestBody.this;
 
@@ -73,7 +74,7 @@ public class ApiRequestBody {
     }
 
     public String toJsonString(Object body) {
-        return new Gson().toJson(body);
+        return GsonSingle.getInstance().toJson(body);
     }
 
     public String data2Json() {
