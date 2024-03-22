@@ -326,6 +326,5 @@ class ComposeUIActivity : BaseActivity() {
         }
     }
 
-
 }
 

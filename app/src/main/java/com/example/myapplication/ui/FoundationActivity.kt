@@ -36,6 +36,8 @@ import com.example.myapplication.ui.vm.TestViewModel
 import com.example.myapplication.ui.widget.GradientButton
 import com.example.myapplication.ui.widget.GradientButton2
 import com.example.myapplication.ui.widget.createCircularReveal
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.statusBarsHeight
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,7 +62,6 @@ class FoundationActivity : BaseActivity() {
     @Composable
     override fun ContentView() {
         Column {
-
             TestButtons(mViewmodel.uiEvent, mViewmodel.uiViewEvent)
             SnackDetail()
             Test()
