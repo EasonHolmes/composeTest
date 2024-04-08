@@ -1,10 +1,12 @@
 package com.example.myapplication.ui
 
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -14,12 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.fragment.app.Fragment
 import com.example.myapplication.R
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
 /**
@@ -34,17 +31,22 @@ class BottomBar_PagerActivity : BaseActivity() {
     }
 
 
-    @OptIn(ExperimentalPagerApi::class)
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun ScaffoldBottomBarSamples() {
         val bottomNumber = listOf("首页", "清除", "电话")
-        val pagerState = rememberPagerState()
+        val pagerState = rememberPagerState(
+            initialPage = 0,
+            initialPageOffsetFraction = 0f,
+            pageCount = {3}
+        )
         Scaffold( bottomBar = {
             BottomNav(bottomNumber,pagerState)
         }, content = { paddingValues: PaddingValues ->
-            HorizontalPager(
-                count = bottomNumber.size, modifier = Modifier.fillMaxHeight(),
+            androidx.compose.foundation.pager.HorizontalPager(
+                modifier = Modifier.fillMaxHeight(),
                 state = pagerState,
+                beyondBoundsPageCount = 3
             ) { page ->
                 Log.e("ethan",pagerState.currentPage.toString())
                 when (pagerState.currentPage) {
@@ -65,9 +67,9 @@ class BottomBar_PagerActivity : BaseActivity() {
             }
         })
     }
-    @OptIn(ExperimentalPagerApi::class)
+    @OptIn(ExperimentalFoundationApi::class)
     @Composable
-    fun BottomNav(bottomNumber: List<String>,pagerState: PagerState) {
+    fun BottomNav(bottomNumber: List<String>,pagerState: androidx.compose.foundation.pager.PagerState) {
         val scope = rememberCoroutineScope()
         val bottomIcon =
             listOf(Icons.Default.Home, Icons.Default.Clear, Icons.Default.Call, Icons.Default.Email)

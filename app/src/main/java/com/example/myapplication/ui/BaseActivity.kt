@@ -3,17 +3,12 @@ package com.example.myapplication.ui
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.myapplication.ui.mytheme.LightDarkTheme
 import com.example.myapplication.ui.widget.backTopbar
 import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 /**

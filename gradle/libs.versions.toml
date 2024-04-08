@@ -1,0 +1,94 @@
+[versions]
+agp = "8.3.1"
+kotlin = "1.9.23"
+composeVersion="1.6.4"
+lifecycleVersion = "2.7.0"
+activityCompose = "1.8.2"
+androidxAppcompat="1.6.1"
+systemuiController= "0.16.0"
+
+[libraries]
+#基础的库 start//
+androidx-core-core-ktx = { group = "androidx.core", name = "core", version = "1.12.0" }
+#编译期优化 compose
+androidx-compose-compiler-compiler = { group = "androidx.compose.compiler", name = "compiler", version = '1.5.11' }
+androidx-compose-ui-ui = { group = "androidx.compose.ui", name = "ui", version.ref="composeVersion" }
+androidx-compose-foundation-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref="composeVersion" }
+androidx-compose-material-material = { group = "androidx.compose.material", name = "material", version.ref="composeVersion" }
+androidx-constraintlayout-constranintlayout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version="1.0.1" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling",version.ref="composeVersion" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" ,version.ref="composeVersion" }
+
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
+#ViewModel utilities for Compose
+androidx-lifecycle-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleVersion" }
+androidx-lifecycle-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleVersion" }
+
+androidx-appcompat-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppcompat" }
+androidx-appcompat-appcompat-resources = { group = "androidx.appcompat", name = "appcompat-resources", version.ref = "androidxAppcompat" }
+com-google-android-material-material = { group = "com.google.android.material", name = "material", version="1.11.0" }
+#基础的库end
+
+#工具库
+androidx-lifecycle-lifecycle-process={group="androidx.lifecycle",name="lifecycle-process",version.ref="lifecycleVersion"}
+androidx-lifecycle-lifecycle-runtime-ktx={group="androidx.lifecycle",name="lifecycle-runtime-ktx",version.ref="lifecycleVersion"}
+androidx-lifecycle-lifecycle-common-java8={group="androidx.lifecycle",name="lifecycle-common-java8",version.ref="lifecycleVersion"}
+androidx-lifecycle-lifecycle-viewmodel-ktx={group="androidx.lifecycle",name="lifecycle-viewmodel-ktx",version.ref="lifecycleVersion"}
+androidx-lifecycle-lifecycle-viewmodel-savedstate={group="androidx.lifecycle",name="lifecycle-viewmodel-savedstate",version.ref="lifecycleVersion"}
+androidx-lifecycle-lifecycle-livedata-ktx={group="androidx.lifecycle",name="lifecycle-livedata-ktx",version.ref="lifecycleVersion"}
+
+#可选的
+androidx-compose-runtime-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version="1.6.4" }
+#状态栏导航栏屏幕尺寸
+com-google-accompanist-accompanist-insets = { group = "com.google.accompanist", name = "accompanist-insets", version.ref="systemuiController" }
+com-google-accompanist-accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref="systemuiController" }
+#图片加载
+com-github-skydoves-landscapist-glide={ group = "com.github.skydoves", name = "landscapist-glide", version="2.1.0" }
+#material3
+androidx-compose-material3-material3 = { group = "androidx.compose.material3", name = "material3", version="1.2.1" }
+
+androidx-core-core-splashscreen={group="androidx.core",name="core-splashscreen",version="1.0.1"}
+com-google-code-gson-gson={group="com.google.code.gson",name="gson",version="2.10.1"}
+com-tencent-mmkv={group="com.tencent",name="mmkv",version="1.2.11"}
+com-squareup-okhttp3-okhttp={group="com.squareup.okhttp3",name="okhttp",version="4.9.1"}
+#bottomsheet
+com-github-skydoves-flexible-bottomsheet-material={group="com.github.skydoves",name="flexible-bottomsheet-material",version="0.1.1"}
+#计算库
+net-objecthunter-exp4j={group="net.objecthunter",name="exp4j",version="0.4.8"}
+
+
+#//lifecycle viewmodel livedata
+#//    //BottomNavigation rememberPagerState
+#//    implementation "com-google-accompanist:accompanist-pager:0-30-1"
+#//    implementation "androidx-navigation:navigation-compose:2-7-5"
+#//    implementation "androidx-constraintlayout:constraintlayout:2-1-4"
+#//    implementation "androidx-paging:paging-compose:$compose_version"
+#//    implementation "androidx-paging:paging-common-ktx:3-1-1"
+#//    implementation "androidx-compose-ui:ui-util:$compose_version"
+#
+#
+#//    openApi
+#//    implementation "com-aallam-openai:openai-client:3-0-0-beta01"
+#//    // import Kotlin API client BOM
+#//    implementation platform('com-aallam-openai:openai-client-bom:3-0-0-beta01')
+#//
+#//    // define dependencies without versions
+#//    implementation 'com-aallam-openai:openai-client'
+#//    implementation 'io-ktor:ktor-client-okhttp'
+
+#//    api project(path: ':icon_library')
+
+#//计算库
+#implementation 'net-objecthunter:exp4j:0-4-8'
+
+#//retrofit
+#//    implementation "com.squareup.retrofit2:retrofit:2.9.0"
+#//    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+#//    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+

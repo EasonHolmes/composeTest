@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
@@ -18,6 +19,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -32,6 +35,8 @@ import com.example.myapplication.ui.mytheme.LightDarkTheme
 import com.example.myapplication.ui.utils.TimerLifecycle
 import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
+import com.google.accompanist.insets.ExperimentalAnimatedInsets
+import com.google.accompanist.insets.rememberImeNestedScrollConnection
 
 
 /**
@@ -43,7 +48,6 @@ enum class JumpEntity(val value: String) {
     MOTIONLAYOUT("motionLayout"),
     COLLAPSING("Collapsing视差"),
     BOTTOM_BAR("Bottombar"),
-    NAVIGATION("Navigation"),
     PREVIEW_VIEWMODE("Viewmodel在Preview中使用"),
     ANIMATION2("animation2"),
     COORDINATORLAYOUT("CoordinatorLayoutCompose"),
@@ -60,7 +64,6 @@ class ComposeUIActivity : BaseActivity() {
         JumpEntity.MOTIONLAYOUT,
         JumpEntity.COLLAPSING,
         JumpEntity.BOTTOM_BAR,
-        JumpEntity.NAVIGATION,
         JumpEntity.PREVIEW_VIEWMODE,
         JumpEntity.ANIMATION2,
         JumpEntity.COORDINATORLAYOUT,
@@ -98,8 +101,9 @@ class ComposeUIActivity : BaseActivity() {
 //        Logutils.e("aaaa===="+aaaa)
     }
 
+    @SuppressLint("HardwareIds")
     fun getAndroidId(context: Context): String {
-        return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID)
+        return Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
     }
 
     override fun onRestart() {
@@ -117,13 +121,18 @@ class ComposeUIActivity : BaseActivity() {
         Log.e("ethan", lifecycle.currentState.name)
     }
 
+    @OptIn(ExperimentalAnimatedInsets::class)
     @Composable
     override fun ContentView() {
         var changeColor by remember {
             mutableStateOf(ColorTheme.WHITE)
         }
-
-        Column {
+        var content by remember {
+            mutableStateOf("上拉有键盘出来动画")
+        }
+//键盘动画是另的这句，通过这个库com.google.accompanist:accompanist-insets
+        //同时需要ProvideWindowInsets(windowInsetsAnimationsEnabled: Boolean = true,){}来包裹要不会有奇怪的问题
+        Column(Modifier.nestedScroll(rememberImeNestedScrollConnection())) {
             //还有lightDarkTheme根据主题变化
             ChangeColorApplicationTheme(changeColor) {
                 Button(onClick = {
@@ -137,8 +146,14 @@ class ComposeUIActivity : BaseActivity() {
                         Text(text = "使用matertheme改变主题，切换系统LightTheme DarkTheme看效果")
                     }
                 }
-                ListUI()
+                Column(Modifier.weight(1f)) {
+                    ListUI()
+
+                }
             }
+            TextField(value = content, onValueChange = {
+                content = it
+            })
 
         }
     }
@@ -299,9 +314,6 @@ class ComposeUIActivity : BaseActivity() {
                 startActivity(Intent(this, BottomBar_PagerActivity::class.java))
             }
 
-            JumpEntity.NAVIGATION -> {
-                startActivity(Intent(this, NavigationActivity::class.java))
-            }
 
             JumpEntity.PREVIEW_VIEWMODE -> {
                 startActivity(Intent(this, PreviewByViewmodelActivity::class.java))

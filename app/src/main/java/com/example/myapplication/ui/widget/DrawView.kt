@@ -68,9 +68,9 @@ fun drawContent(imgId: Int, context: AppCompatActivity) {
     var value by remember { mutableStateOf(0) }
     val list = arrayListOf(
         "1",
-        "1",
-        "1",
-        "1",
+        "2",
+        "3",
+        "4",
     ).toMutableStateList()//LazyColumn等lazy列需要使用state类型的类才可以
     Scaffold(
         //单独设置shape
@@ -175,10 +175,10 @@ fun drawContent(imgId: Int, context: AppCompatActivity) {
                     Text(text = "list_header")
                 }
                 itemsIndexed(
-                    items = list
+                    items = list,
+//                    key = {index, item -> item.hashCode() } //key = 您可以为每个列表项提供一个稳定的唯一键，为 key 参数提供一个块。提供稳定的键可使项状态在发生数据集更改后保持一致：不过，对于可用作项键的类型有一条限制。list
                     //// The key is important so the Lazy list can remember your
                     //          // scroll position when more items are fetched!
-                    //key = { item -> item.hashCode() }) // //key = 您可以为每个列表项提供一个稳定的唯一键，为 key 参数提供一个块。提供稳定的键可使项状态在发生数据集更改后保持一致：不过，对于可用作项键的类型有一条限制。键的类型必须受 Bundle 支持，这是 Android 的机制，旨在当重新创建 activity 时保持相应状态。Bundle 支持基元、枚举或 Parcelable 等类型。
                 ) { index, item ->
                     Column(
                         modifier = Modifier

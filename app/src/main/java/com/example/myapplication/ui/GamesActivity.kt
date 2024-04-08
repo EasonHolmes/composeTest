@@ -6,8 +6,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.example.myapplication.JumpEntity
-import com.example.myapplication.ui.pintu.PintuActivity
 
 enum class GameJumpEntity(val value: String) {
     PINTU("拼图游戏xml和compose"),
