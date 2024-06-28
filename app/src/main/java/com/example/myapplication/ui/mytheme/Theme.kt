@@ -13,6 +13,7 @@ import com.example.myapplication.ui.theme.*
  * Created by Ethan Cui on 2022/3/11
  */
 
+@SuppressLint("ConflictingOnColor")
 private val DarkColorPalette = darkColors(
     primary = Purple200,
     primaryVariant = Purple700,

@@ -90,7 +90,7 @@ class BottomBar_PagerActivity : BaseActivity() {
                     }, icon = {
 //                            if (checkIndex == index) {
 //                                BadgeBox(badgeContent = {
-//                                    //显示消息气泡99+
+                                    //显示消息气泡99+
 //                                    Text(text = "99+")
 //                                }, contentColor = Color.White, backgroundColor = Color.Red) {
 //                                    Icon(imageVector = bottomIcon[index], contentDescription = null)

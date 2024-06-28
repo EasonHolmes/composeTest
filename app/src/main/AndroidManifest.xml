@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+<!--    android:allowCrossUidActivitySwitchFromBelow="false"  android15阻止与堆栈顶部 UID 不匹配的应用启动
+        android:enableOnBackInvokedCallback="true" 预测返回动画-->
     <application
         android:label="@string/app_name"
         android:name=".MainApplication"
@@ -16,8 +19,10 @@
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup"
         android:theme="@style/AppTheme"
+        android:enableOnBackInvokedCallback="true"
+        android:allowCrossUidActivitySwitchFromBelow="false"
         tools:replace="android:allowBackup"
-        tools:targetApi="n">
+        tools:targetApi="35">
         <activity
             android:name=".ComposeUIActivity"
             android:exported="true"
@@ -45,6 +50,8 @@
         <activity android:name=".ui.Game2048Activity"/>
         <activity android:name=".ui.WhackMoleActivity"/>
         <activity android:name=".ui.GamesActivity"/>
+        <activity android:name=".ui.ShareTransitionActivity"/>
+        <activity android:name=".ui.SingleActivityMutilScreen"/>
 
 
 

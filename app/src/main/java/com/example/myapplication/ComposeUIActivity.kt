@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
+import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -23,6 +24,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
@@ -37,6 +39,7 @@ import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
 import com.google.accompanist.insets.rememberImeNestedScrollConnection
+import java.io.File
 
 
 /**
@@ -52,7 +55,9 @@ enum class JumpEntity(val value: String) {
     ANIMATION2("animation2"),
     COORDINATORLAYOUT("CoordinatorLayoutCompose"),
     ZHUANPAN("转盘"),
-    GAMES("游戏类")
+    GAMES("游戏类"),
+    SHARETRANSITION("compose共享元素动画"),
+    SINGLEACTIVITYMUTILSCREEN("单activity多compose")
 }
 
 data class Users(var name: MutableState<String> = mutableStateOf(""))
@@ -69,6 +74,8 @@ class ComposeUIActivity : BaseActivity() {
         JumpEntity.COORDINATORLAYOUT,
         JumpEntity.ZHUANPAN,
         JumpEntity.GAMES,
+        JumpEntity.SHARETRANSITION,
+        JumpEntity.SINGLEACTIVITYMUTILSCREEN,
     ).apply {
         reverse()
     }
@@ -81,6 +88,7 @@ class ComposeUIActivity : BaseActivity() {
     private val mViewmodel by lazy {
         ViewModelProvider(this)[TestViewModel::class.java]
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -212,7 +220,7 @@ class ComposeUIActivity : BaseActivity() {
 //    }
 
     override fun getActTtitle(): String {
-        return "mainAct"
+        return ""
     }
 
     //测试ComposeUI 刷新范围,结论：
@@ -335,8 +343,17 @@ class ComposeUIActivity : BaseActivity() {
                 startActivity(Intent(this, ZhuanPanActivity::class.java))
             }
 
+            JumpEntity.SHARETRANSITION -> {
+                startActivity(Intent(this, ShareTransitionActivity::class.java))
+            }
+
+            JumpEntity.SINGLEACTIVITYMUTILSCREEN -> {
+                startActivity(Intent(this, SingleActivityMutilScreen::class.java))
+            }
+
         }
     }
+
 
 }
 

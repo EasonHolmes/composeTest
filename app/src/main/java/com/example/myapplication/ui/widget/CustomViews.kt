@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.widget
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.graphics.drawable.Icon
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -107,7 +108,7 @@ fun NoDescriptionImage(
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha,
-    modifier: Modifier = Modifier,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
     colorFilter: ColorFilter? = null
 ) {
     Image(

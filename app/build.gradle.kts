@@ -3,14 +3,16 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("xml-class-guard")
 }
+//apply(from ="../replaceMap.gradle")
+//apply(from = "xmlClassGuard.gradle")
 android {
     namespace = "com.example.myapplication"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.myapplication"
-        minSdk = 24
-        targetSdk = 33
+        minSdk = 25
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
         vectorDrawables {
@@ -87,6 +89,9 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+        jniLibs {
+            useLegacyPackaging = false//不压缩共享库 android15页面可使用16KB
+        }
     }
 }
 
@@ -110,6 +115,7 @@ dependencies {
     implementation(libs.androidx.appcompat.appcompat)
     implementation(libs.androidx.appcompat.appcompat.resources)
     implementation(libs.com.google.android.material.material)
+    implementation(libs.androidx.multidex.multidex)
 //#基础的库end
     implementation(libs.androidx.compose.runtime.runtime.livedata)
     implementation(libs.com.google.accompanist.accompanist.insets)
@@ -120,6 +126,10 @@ dependencies {
     implementation(libs.com.tencent.mmkv)
     implementation(libs.com.squareup.okhttp3.okhttp)
     implementation(libs.com.github.skydoves.flexible.bottomsheet.material)
+    //compose 动画库 目前只用于共享元素使用
+    implementation(libs.androidx.compose.animation.animation)
+    //compose navigation
+    implementation(libs.androidx.navigation.navigation.compose)
     //计算库
     implementation(libs.net.objecthunter.exp4j)
 

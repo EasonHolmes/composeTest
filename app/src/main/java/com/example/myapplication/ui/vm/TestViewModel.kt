@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flow
  */
 class TestViewModel : ViewModel() {
     val uiViewEvent: SingleLivedata<ExampleUiState> = SingleLivedata()
-    val uiEvent = MutableStateFlow(ExampleUiData("content"))
+    val uiEvent = MutableStateFlow(ExampleUiData("content1111"))
     fun changeData(int: Int = 0) {
         uiViewEvent.value = ExampleUiState(exampleUiData = ExampleUiData("testestestset" + int))
         uiEvent.value = ExampleUiData("testestestset")
