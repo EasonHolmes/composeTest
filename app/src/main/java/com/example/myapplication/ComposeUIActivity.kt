@@ -1,35 +1,62 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.app.usage.UsageStatsManager
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
-import android.net.Uri
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.myapplication.ui.*
+import com.example.myapplication.ui.Animation2Activity
+import com.example.myapplication.ui.AnimationActivity
+import com.example.myapplication.ui.BaseActivity
+import com.example.myapplication.ui.BottomBar_PagerActivity
+import com.example.myapplication.ui.CollapsingActiivty
+import com.example.myapplication.ui.FoundationActivity
+import com.example.myapplication.ui.GamesActivity
+import com.example.myapplication.ui.MotionLayoutActivity
+import com.example.myapplication.ui.PreviewByViewmodelActivity
+import com.example.myapplication.ui.ShareTransitionActivity
+import com.example.myapplication.ui.singleActMutilScreen.SingleActivityMutilScreen
+import com.example.myapplication.ui.ZhuanPanActivity
 import com.example.myapplication.ui.coordinator.CoordinatorLayoutNatigationAct
 import com.example.myapplication.ui.mytheme.ChangeColorApplicationTheme
 import com.example.myapplication.ui.mytheme.ColorTheme
@@ -39,7 +66,6 @@ import com.example.myapplication.ui.vm.ExampleUiState
 import com.example.myapplication.ui.vm.TestViewModel
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
 import com.google.accompanist.insets.rememberImeNestedScrollConnection
-import java.io.File
 
 
 /**
@@ -107,7 +133,91 @@ class ComposeUIActivity : BaseActivity() {
 //        }
 //      var aaaa =   getAndroidId(this)
 //        Logutils.e("aaaa===="+aaaa)
+
+//        val agree =  packageManager.checkPermission(
+//            Manifest.permission.WRITE_CALENDAR,
+//            packageName
+//        ) == PackageManager.PERMISSION_GRANTED;
+//        if(agree){
+//            addCalendarEventWithReminder(
+//                title = "title",
+//                description = "descrip",
+//                startTime = 1720074620000,
+//                endTime = 1720074620000,
+//                reminderMinutes = 5
+//            )
+//        }else{
+//            requestPermissions(arrayOf(Manifest.permission.WRITE_CALENDAR),1)
+//        }
     }
+
+
+    // 添加日历事件和提醒
+    fun addCalendarEventWithReminder(
+        title: String?,
+        description: String?,
+        startTime: Long,
+        endTime: Long,
+        reminderMinutes: Int
+    ) {
+        val cr = contentResolver
+        val values = ContentValues()
+
+        // 设置日历事件的基本信息
+        values.put(CalendarContract.Events.CALENDAR_ID, 1) // 日历ID，可以根据实际情况修改
+        values.put(CalendarContract.Events.TITLE, title) // 标题
+        values.put(CalendarContract.Events.DESCRIPTION, description) // 描述
+//        values.put(CalendarContract.Events.EVENT_LOCATION, "地点") // 地点
+        values.put(CalendarContract.Events.DTSTART, startTime) // 开始时间
+        values.put(CalendarContract.Events.DTEND, endTime) // 结束时间
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, "CST") // 时区
+
+        // 添加日历事件
+        val uri = cr.insert(CalendarContract.Events.CONTENT_URI, values)
+        val eventID = uri!!.lastPathSegment!!.toLong()
+
+        // 添加提醒
+        val reminderValues = ContentValues()
+        reminderValues.put(CalendarContract.Reminders.EVENT_ID, eventID)
+        reminderValues.put(
+            CalendarContract.Reminders.METHOD,
+            CalendarContract.Reminders.METHOD_ALERT
+        )
+        reminderValues.put(CalendarContract.Reminders.MINUTES, reminderMinutes)
+        cr.insert(CalendarContract.Reminders.CONTENT_URI, reminderValues)
+    }
+
+
+    private fun getUsageStats(context: Context) {
+        val usageStatsManager = context.getSystemService(USAGE_STATS_SERVICE) as UsageStatsManager
+
+        val currentTime = System.currentTimeMillis()
+        val startTime = currentTime - (24 * 60 * 60 * 1000) // 从当前时间的前一天开始获取数据
+
+        val stats = usageStatsManager.queryUsageStats(
+            UsageStatsManager.INTERVAL_BEST, currentTime - 2000, currentTime
+//            startTime,
+//            currentTime
+        )
+
+        for (usageStats in stats) {
+            val packageName = usageStats.packageName
+            val totalTimeInForeground = usageStats.totalTimeInForeground
+
+            Logutils.e("eeeee==" + packageName)
+            Logutils.e("eeeee11111==" + totalTimeInForeground)
+        }
+        if (stats.isEmpty()) {
+            try {
+                startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+            } catch (e: Exception) {
+                Toast.makeText(this, "无法开启允许查看使用情况的应用界面", Toast.LENGTH_LONG)
+                    .show();
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     @SuppressLint("HardwareIds")
     fun getAndroidId(context: Context): String {
@@ -122,6 +232,7 @@ class ComposeUIActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         Log.e("ethan", lifecycle.currentState.name)
+//        getUsageStats(this)
     }
 
     override fun onDestroy() {
@@ -356,4 +467,47 @@ class ComposeUIActivity : BaseActivity() {
 
 
 }
+//class TTT :WebViewClient(){
+//    override fun shouldInterceptRequest(
+//        view: WebView?,
+//        request: WebResourceRequest?
+//    ): WebResourceResponse? {
+//        val headers = request!!.requestHeaders
+//        headers["X-Requested-With"] = "com.peacocktv.peacockandroid"
+//
+//        return try {
+//            val url = URL(request!!.url.toString())
+//            val conn = url.openConnection() as HttpURLConnection
+//
+//            for (header in headers.keys) {
+//                conn.setRequestProperty(header, headers[header])
+//            }
+//
+//            val contentType = conn.contentType
+//            val mime = contentType.split(";")[0]
+//
+//            val webResponse=WebResourceResponse(
+//                mime,
+//                conn.contentEncoding,
+//                conn.inputStream
+//            )
+//
+//            var rmap= mutableMapOf<String,String>()
+//            val rheaders: Map<*, *> = conn.headerFields
+//            val keys: Set<String> = rheaders.keys as Set<String>
+//            for (key in keys) {
+//                val `val` = conn.getHeaderField(key)
+//                println("$key    $`val`")
+//                rmap[key]=`val`
+//            }
+//
+//            webResponse.responseHeaders=rmap
+//
+//            webResponse
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            null
+//        }
+//    }
+//}
 

@@ -11,10 +11,19 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateSizeAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.DraggableState
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.draggable2D
+import androidx.compose.foundation.gestures.rememberDraggable2DState
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,6 +35,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -34,6 +45,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.ButtonDefaults
@@ -77,9 +89,11 @@ import com.example.myapplication.ui.widget.RowTabStyleDefault
 import com.example.myapplication.ui.widget.GradientProgress
 import com.example.myapplication.ui.widget.PinTuWidget
 import com.example.myapplication.ui.widget.RowTabUI
+import com.example.myapplication.ui.widget.SwipeButton
 import com.example.myapplication.ui.widget.SwitchMaterial3Defaults
 import com.example.myapplication.ui.widget.SwitchMaterial3
 import com.example.myapplication.ui.widget.TabStyle
+import com.example.myapplication.ui.widget.TransformBox
 import com.example.myapplication.ui.widget.UploadProgressButton
 import com.example.myapplication.ui.widget.dialog.WithdrawCashDialog
 import com.example.myapplication.ui.widget.wave.DrawType
@@ -95,6 +109,9 @@ import kotlin.math.roundToInt
 
 /**
  * Created by Ethan Cui on 2023/5/12
+ * 手势类教程
+ * https://www.cnblogs.com/joy99/p/18272143
+ *
  */
 class Animation2Activity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -180,7 +197,13 @@ class Animation2Activity : BaseActivity() {
                     }
                 )
             }
-            DragView()
+            Row {
+                Draggable2DBox()
+                TransformBox()
+            }
+            DraggableHorVer()
+            SwipeButton()
+
         }
         LaunchedEffect(key1 = Unit, block = {
             progressAnima.animateTo(1f, tween(1000), block = {
@@ -492,38 +515,52 @@ class Animation2Activity : BaseActivity() {
             )
         )
     }
-
-
-    @Composable
-    fun DragView() {
-        var moveOffset by remember {
-            mutableStateOf(IntOffset(0, 0))
+}
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun Draggable2DBox() {
+    var offset by remember {
+        mutableStateOf(Offset.Zero)
+    }
+    Box(modifier = Modifier
+        .offset {
+            IntOffset(x = offset.x.roundToInt(), y = offset.y.roundToInt())
         }
-        var lastX by remember {
-            mutableIntStateOf(0)
-        }
-        var lastY by remember {
-            mutableIntStateOf(0)
-        }
-        Box(modifier = Modifier
-            .offset {
-                moveOffset
+        .background(Color.LightGray)
+        .size(80.dp)
+        .draggable2D(
+            state = rememberDraggable2DState { onDelta ->
+                offset += onDelta
             }
-            .size(50.dp, 50.dp)
-            .background(Color.Red)
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDrag = { change, dragAmount ->
-                        change.consume()
-                        lastX += dragAmount.x.toInt()
-                        lastY += dragAmount.y.toInt()
-                        moveOffset = IntOffset(lastX, lastY)
-                    },
-                )
+        )){
+        Text(text = "随意拖动")
+    }
+}
+@Composable
+fun DraggableHorVer(){
+    var draDistance by remember {
+        mutableFloatStateOf(0f)
+    }
+    val draggableState = rememberDraggableState {distance->
+        draDistance += distance
+    }
+    Column {
+        Box(
+            modifier = Modifier
+                .width(300.dp)
+                .background(Color.Blue)
 
-            }){
-            Text(text = "拖拽方块",modifier = Modifier.align(alignment = Alignment.Center))
+        ) {
+            Box( modifier = Modifier
+                .offset {
+                    IntOffset(draDistance.roundToInt(), 0)
+                }
+                .size(50.dp)
+                .draggable(state = draggableState, orientation = Orientation.Horizontal)
+                .clip(RoundedCornerShape(360.dp))
+                .background(Color.Yellow), contentAlignment = Alignment.Center) {
+               Text(text = "横/竖向拖动")
+            }
         }
     }
-
 }

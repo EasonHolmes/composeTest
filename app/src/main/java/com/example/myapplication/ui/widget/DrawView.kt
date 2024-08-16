@@ -28,7 +28,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -89,7 +91,7 @@ fun drawContent(imgId: Int, context: AppCompatActivity) {
                     //滚动
                     .verticalScroll(rememberScrollState())
             ) {
-                repeat(100) {
+                repeat(10) {
                     Text(
                         text = "抽屉组件中内容$it",
                         modifier = Modifier.padding(top = 10.dp),
