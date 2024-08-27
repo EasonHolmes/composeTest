@@ -4,17 +4,24 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import android.util.Log
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateSizeAsState
 import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -61,6 +68,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -74,17 +82,20 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.Logutils
 import com.example.myapplication.R
+import com.example.myapplication.ui.widget.BreathLoading
 import com.example.myapplication.ui.widget.ChangeImageSwitch
 import com.example.myapplication.ui.widget.ChangeFontSwitch
 import com.example.myapplication.ui.widget.ChangeNormalSwitch
 import com.example.myapplication.ui.widget.ChangeStatusSwitchDefault
 import com.example.myapplication.ui.widget.CheckBoxGroup
 import com.example.myapplication.ui.widget.CircleProgress
+import com.example.myapplication.ui.widget.CustomLoading
 import com.example.myapplication.ui.widget.RowTabStyleDefault
 import com.example.myapplication.ui.widget.GradientProgress
 import com.example.myapplication.ui.widget.PinTuWidget
@@ -203,6 +214,8 @@ class Animation2Activity : BaseActivity() {
             }
             DraggableHorVer()
             SwipeButton()
+            CustomLoading()
+            BreathLoading()
 
         }
         LaunchedEffect(key1 = Unit, block = {

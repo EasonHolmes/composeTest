@@ -528,7 +528,7 @@ fun UpdateTransitionDemo() {
 ////                spring(stiffness = Spring.StiffnessVeryLow)
 //            }
             tween(3000)
-        }, label = "") {
+        }, label = "",) {
             it.size
         }
 
