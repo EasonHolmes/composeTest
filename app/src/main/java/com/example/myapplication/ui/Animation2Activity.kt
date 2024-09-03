@@ -89,6 +89,7 @@ import androidx.compose.ui.unit.sp
 import com.example.myapplication.Logutils
 import com.example.myapplication.R
 import com.example.myapplication.ui.widget.BreathLoading
+import com.example.myapplication.ui.widget.BreathLoading3
 import com.example.myapplication.ui.widget.ChangeImageSwitch
 import com.example.myapplication.ui.widget.ChangeFontSwitch
 import com.example.myapplication.ui.widget.ChangeNormalSwitch
@@ -98,6 +99,7 @@ import com.example.myapplication.ui.widget.CircleProgress
 import com.example.myapplication.ui.widget.CustomLoading
 import com.example.myapplication.ui.widget.RowTabStyleDefault
 import com.example.myapplication.ui.widget.GradientProgress
+import com.example.myapplication.ui.widget.LightSwitch
 import com.example.myapplication.ui.widget.PinTuWidget
 import com.example.myapplication.ui.widget.RowTabUI
 import com.example.myapplication.ui.widget.SwipeButton
@@ -213,9 +215,14 @@ class Animation2Activity : BaseActivity() {
                 TransformBox()
             }
             DraggableHorVer()
-            SwipeButton()
-            CustomLoading()
-            BreathLoading()
+            SwipeButton{progress,complete->
+                Logutils.e("ttt==$progress"+"complete==$complete")
+            }
+            Row {
+                CustomLoading()
+                BreathLoading()
+                BreathLoading3(size = 40.dp)
+            }
 
         }
         LaunchedEffect(key1 = Unit, block = {
@@ -367,6 +374,13 @@ class Animation2Activity : BaseActivity() {
                 width = 100.dp,
                 height = 30.dp,
             )
+            LightSwitch(
+                backgroundLineColor = Color.White,
+                switchColor = Color.Black,
+                offSwitchColor = Color.White
+            ) {
+                Logutils.e("switch=$it")
+            }
         }
 
     }

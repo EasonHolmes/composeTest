@@ -2,6 +2,9 @@ package com.example.myapplication.ui.widget
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.CubicBezierEasing
+import androidx.compose.animation.core.EaseInQuart
+import androidx.compose.animation.core.InfiniteRepeatableSpec
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -26,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Blue
@@ -136,7 +140,8 @@ fun BreathLoading() {
             animation = tween(
                 durationMillis = 1000,
                 easing = LinearEasing
-            ), RepeatMode.Reverse,
+            ),
+            RepeatMode.Reverse,
         )
     )
     val sweep by infiniteTransition.animateFloat(
@@ -146,7 +151,8 @@ fun BreathLoading() {
             animation = tween(
                 durationMillis = 1000,
                 easing = LinearEasing
-            ), RepeatMode.Reverse,
+            ),
+            RepeatMode.Reverse,
         )
     )
     val colors by infiniteTransition.animateColor(
@@ -156,7 +162,8 @@ fun BreathLoading() {
             animation = tween(
                 durationMillis = 1000,
                 easing = LinearEasing
-            ), RepeatMode.Reverse,
+            ),
+            RepeatMode.Reverse,
         )
     )
 
@@ -168,13 +175,59 @@ fun BreathLoading() {
                 .size(30.dp)
         )
         Canvas(modifier = Modifier.size(32.dp), onDraw = {
-           drawArc(color = Color.Black, startAngle = angle, sweepAngle = 360/sweep, useCenter = false, style = Stroke(
-               width = 5f,
-               cap = StrokeCap.Round,
-               join =
-               StrokeJoin.Round,
-           ),)
+            drawArc(
+                color = Color.Black,
+                startAngle = angle,
+                sweepAngle = 360 / sweep,
+                useCenter = false,
+                style = Stroke(
+                    width = 5f,
+                    cap = StrokeCap.Round,
+                    join =
+                    StrokeJoin.Round,
+                ),
+            )
         })
+    }
+}
+
+@Composable
+fun BreathLoading3(size: Dp) {
+    val rotate by rememberInfiniteTransition(label = "").animateFloat(
+        initialValue = 0f, targetValue = 360f, animationSpec = InfiniteRepeatableSpec(
+            animation = tween(durationMillis = 2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ), label = ""
+    )
+    val scale by rememberInfiniteTransition(label = "").animateFloat(
+        initialValue = 1f, targetValue =1.5f, animationSpec = InfiniteRepeatableSpec(
+            animation = tween(durationMillis = 1500, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ), label = ""
+    )
+    Box(contentAlignment = Alignment.Center) {
+        Canvas(modifier = Modifier
+            .size(size)
+            .rotate(rotate)) {
+            drawArc(
+                color = Color.Black,
+                startAngle = 0f,
+                sweepAngle = 90f,
+                useCenter = false,
+                style = Stroke(width = 5f, cap = StrokeCap.Round, join = StrokeJoin.Round)
+            )
+            drawArc(
+                color = Color.Black,
+                startAngle = 180f,
+                sweepAngle = 90f,
+                useCenter = false,
+                style = Stroke(width = 5f, cap = StrokeCap.Round, join = StrokeJoin.Round)
+            )
+        }
+        Canvas(modifier = Modifier.size(size-30.dp).scale(scale)) {
+            drawArc(color = Color.Black, startAngle = 0f, sweepAngle = 360f, useCenter = false,
+                style = Stroke(width = 5*scale, cap = StrokeCap.Round, join = StrokeJoin.Round))
+        }
     }
 }
 
@@ -182,6 +235,6 @@ fun BreathLoading() {
 @Composable
 fun DDD() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        BreathLoading()
+        BreathLoading3(50.dp)
     }
 }

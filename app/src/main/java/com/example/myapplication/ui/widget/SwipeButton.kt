@@ -30,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -60,12 +61,12 @@ enum class DragAnchors {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SwipeButton() {
+fun SwipeButton(complete: (progress: Float, complete: Boolean) -> Unit) {
     val maxWidth = 350.dp
     val controlWidth = 50.dp
     val density = LocalDensity.current
 
-    val sizePx = with(LocalDensity.current){(maxWidth-controlWidth).toPx()}
+    val sizePx = with(LocalDensity.current) { (maxWidth - controlWidth).toPx() }
     // 2. 使用 remember 声明 AnchoredDraggableState,确保重组过程中能够缓存结果
     val state = remember {
         AnchoredDraggableState(
@@ -74,8 +75,8 @@ fun SwipeButton() {
 
             // 4. 根据行进的距离确定我们是否对下一个锚点进行动画处理。在这里，我们指定确定我们是否移动到下一个锚点的阈值是到下一个锚点距离的一半——如果我们移动了两个锚点之间的半点，我们将对下一个锚点进行动画处理，否则我们将返回到原点锚点。
             positionalThreshold = { totalDistance ->
-                Logutils.e("totaod==="+totalDistance)
-                totalDistance /2
+                Logutils.e("totaod===" + totalDistance)
+                totalDistance / 2
             },
 
             // 5.确定将触发拖动内容以动画形式移动到下一个锚点的最小速度，已而不管是否 达到 positionalThreshold 指定的阈值。
@@ -114,7 +115,8 @@ fun SwipeButton() {
             .width(maxWidth)
             .anchoredDraggable(
                 state = state,
-                orientation = Orientation.Horizontal,)
+                orientation = Orientation.Horizontal,
+            )
             .background(GreenColor, RoundedCornerShape(controlWidth))
     ) {
         Column(
@@ -131,8 +133,12 @@ fun SwipeButton() {
             modifier = Modifier
                 .offset { IntOffset(state.offset.roundToInt(), 0) }
                 .size(controlWidth),
-            progress =  progress
+            progress = progress
         )
+    }
+    LaunchedEffect(key1 = progress) {
+        complete.invoke(progress, progress == 1f)
+
     }
 }
 
@@ -148,7 +154,7 @@ private fun DraggableControl(
             .background(Color.White, CircleShape),
         contentAlignment = Alignment.Center
     ) {
-        Crossfade(targetState = progress>=0.8, label = "") {
+        Crossfade(targetState = progress >= 0.8, label = "") {
             if (it) {
                 Icon(
                     imageVector = Icons.Filled.Done,
@@ -171,10 +177,11 @@ private fun DraggableControl(
 @Composable
 private fun ConfirmationButtonPreview() {
     LightDarkTheme {
-        Scaffold {paddingValues: PaddingValues ->
+        Scaffold { paddingValues: PaddingValues ->
             paddingValues
             Column(modifier = Modifier.padding(paddingValues)) {
-                SwipeButton()
+                SwipeButton {progress, complete ->  
+                }
             }
         }
     }
